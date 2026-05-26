@@ -184,7 +184,7 @@ const PortalSurvey = () => {
       if (a.q9 === "no") tags.push("NON_TENANT");
       if (a.q19 === "yes") tags.push("HIGH_INTENT");
 
-      const { error } = await supabase.from("profiles").update({
+      const { error } = await (supabase.from("profiles").update as any)({
         survey_completed: true,
         survey_completed_at: new Date().toISOString(),
         country: a.country,
