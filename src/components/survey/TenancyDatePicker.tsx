@@ -30,7 +30,7 @@ export const TenancyDatePicker: React.FC<TenancyDatePickerProps> = ({
 
   // Auto-compute end date when start date or duration changes
   useEffect(() => {
-    if (!startDate || !duration || duration === "" || duration === "other") {
+    if (!startDate || !duration || duration === "other") {
       onEndDateChange(null);
       return;
     }
