@@ -26,8 +26,6 @@ const Footer = () => (
               { label: "For Landlords", path: "/for-landlords" },
               { label: "For Investors", path: "/for-investors" },
               { label: "For Professionals", path: "/professionals" },
-              { label: "Properties", path: "/properties" },
-              { label: "Events", path: "/events" },
             ].map((l) => (
               <li key={l.path}>
                 <Link to={l.path} className="hover:text-accent transition-colors">
@@ -67,7 +65,6 @@ const Footer = () => (
               { label: "Cookie Policy", path: "/legal/cookies" },
               { label: "AML & KYC", path: "/legal/aml-kyc" },
               { label: "Disclaimer", path: "/legal/disclaimer" },
-              { label: "Contact", path: "/contact" },
             ].map((l) => (
               <li key={l.path}>
                 <Link to={l.path} className="hover:text-accent transition-colors">
