@@ -26,16 +26,20 @@ const Cookies = () => (
   >
     <h2 id="what">1. What cookies are</h2>
     <p>
-      Cookies are small text files stored on your device when you visit a website. We also use
-      similar technologies such as pixels, SDKs, local storage, and device fingerprints
+      Cookies are small text files stored on your device when you visit a website.
+    </p>
+    <p>
+      We also use similar technologies such as pixels, SDKs, local storage, and device fingerprints
       (collectively, <strong>cookies</strong> in this policy).
     </p>
 
     <h2 id="why">2. Why we use cookies</h2>
     <p>
-      We use cookies to keep you signed in, secure your session, remember your preferences,
-      measure how the Services perform, and — with your consent — to measure marketing campaigns
-      and personalise content.
+      We use cookies to keep you signed in, secure your session, remember your preferences, and
+      measure how the Services perform.
+    </p>
+    <p>
+      With your consent, we also use them to measure marketing campaigns and personalise content.
     </p>
 
     <h2 id="categories">3. Categories</h2>
@@ -102,9 +106,12 @@ const Cookies = () => (
     <h2 id="consent">9. Consent and Global Privacy Control</h2>
     <p>
       In the EU, UK, and similar jurisdictions, we ask for your explicit, opt-in consent before
-      setting any non-essential cookie. In California, we treat the Global Privacy Control (GPC)
-      browser signal as a valid request to opt out of any "sale" or "sharing" of personal
-      information for cross-context behavioural advertising.
+      setting any non-essential cookie.
+    </p>
+    <p>
+      In California, we treat the Global Privacy Control (GPC) browser signal as a valid request
+      to opt out of any "sale" or "sharing" of personal information for cross-context behavioural
+      advertising.
     </p>
 
     <h2 id="manage">10. Manage your choices</h2>

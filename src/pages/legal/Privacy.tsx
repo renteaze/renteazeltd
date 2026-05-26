@@ -135,10 +135,13 @@ const Privacy = () => (
     <h2 id="transfers">7. International transfers</h2>
     <p>
       Renteaze is based in Nigeria and uses processors located in the European Economic Area,
-      United Kingdom, United States, and other jurisdictions. Where personal data is transferred
-      outside your country, we rely on appropriate safeguards including the European Commission's
-      Standard Contractual Clauses, the UK International Data Transfer Addendum, adequacy decisions
-      where available, and equivalent measures under the Nigeria Data Protection Act.
+      United Kingdom, United States, and other jurisdictions.
+    </p>
+    <p>
+      Where personal data is transferred outside your country, we rely on appropriate safeguards
+      including the European Commission's Standard Contractual Clauses, the UK International Data
+      Transfer Addendum, adequacy decisions where available, and equivalent measures under the
+      Nigeria Data Protection Act.
     </p>
 
     <h2 id="retention">8. Retention</h2>
@@ -192,17 +195,22 @@ const Privacy = () => (
     <h2 id="exercise">12. Exercising your rights</h2>
     <p>
       Submit requests to <a href="mailto:dpo@renteaze.com">dpo@renteaze.com</a>. We will respond
-      within one month (GDPR), 45 days (CCPA), or as required by the NDPA. We may need to verify
-      your identity before acting. Where a request is manifestly unfounded or excessive we may
-      charge a reasonable fee or refuse.
+      within one month (GDPR), 45 days (CCPA), or as required by the NDPA.
+    </p>
+    <p>
+      We may need to verify your identity before acting. Where a request is manifestly unfounded
+      or excessive we may charge a reasonable fee or refuse.
     </p>
 
     <h2 id="automated">13. Automated decision-making</h2>
     <p>
       We use automated processes for fraud detection, sanctions screening, and credit scoring
       (including for Loan for Rent and Save for Rent). These decisions may significantly affect
-      you. You have the right to request human review, express your point of view, and contest
-      the decision by contacting <a href="mailto:dpo@renteaze.com">dpo@renteaze.com</a>.
+      you.
+    </p>
+    <p>
+      You have the right to request human review, express your point of view, and contest the
+      decision by contacting <a href="mailto:dpo@renteaze.com">dpo@renteaze.com</a>.
     </p>
 
     <h2 id="children">14. Children</h2>
@@ -215,9 +223,12 @@ const Privacy = () => (
     <p>
       We apply encryption in transit (TLS 1.2+) and at rest, role-based access controls, network
       segmentation, vulnerability management, and continuous monitoring. No system is perfectly
-      secure. Where a breach is likely to result in a risk to your rights, we will notify you and
-      the relevant regulator(s) without undue delay and, where feasible, within 72 hours as
-      required by the GDPR and NDPA.
+      secure.
+    </p>
+    <p>
+      Where a breach is likely to result in a risk to your rights, we will notify you and the
+      relevant regulator(s) without undue delay and, where feasible, within 72 hours as required
+      by the GDPR and NDPA.
     </p>
 
     <h2 id="complaints">16. Complaints</h2>
