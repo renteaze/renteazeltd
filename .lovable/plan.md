@@ -1,21 +1,27 @@
-## Issue
+## Goal
+Make the legal pages genuinely readable instead of appearing as one continuous block of text.
 
-Each section across the 5 legal pages is rendered as a single dense paragraph (often 4–8 lines). With long-form legal copy this turns into a wall of text — even with the typography spacing fix from the last turn, the *content itself* is under-paragraphed.
+## What I will change
+1. **Fix the shared legal-page typography** in `src/components/legal/LegalPage.tsx`:
+   - Increase separation between sections.
+   - Add clear spacing before/after paragraphs, lists, and tables.
+   - Reduce overly wide text lines so paragraphs are easier to scan.
+   - Make list items visibly separate instead of looking like inline text.
+   - Keep the table of contents layout, but improve its spacing so it does not compete with the article text.
 
-## Fix
+2. **Fix the Terms page markup** in `src/pages/legal/Terms.tsx`:
+   - Convert definition-style sections into proper definition/list blocks with spacing.
+   - Add visual breathing room between short paragraphs in sections like Eligibility and Accounts.
+   - Avoid headings immediately touching previous content.
 
-Break the dense `<p>` blocks into multiple shorter paragraphs (2–4 sentences each) across all five legal pages, and convert long enumerations embedded in prose into bullet lists. No wording changes, no new sections, no removed obligations — purely structural splits.
+3. **Apply the same readability pattern to the other legal pages**:
+   - `Privacy.tsx`
+   - `Cookies.tsx`
+   - `Disclaimer.tsx`
+   - `AmlKyc.tsx`
 
-**Heuristic applied per section:**
-- A paragraph longer than ~3 sentences or ~60 words gets split at natural topic shifts.
-- Lists hidden inside prose (e.g. "(a) … (b) … (c) …", or comma-separated obligations) become `<ul>` with one item each.
-- Strong opening sentence stays as its own paragraph when it summarises the section (gives the eye a hook).
-
-**Files touched (5):**
-- `src/pages/legal/Terms.tsx` — split sections 3, 6, 7, 8, 10, 11, 13, 15, 17, 18, 20, 21, 22.
-- `src/pages/legal/Privacy.tsx` — split the dense GDPR/CCPA/NDPA narrative blocks; promote rights enumerations to bullets.
-- `src/pages/legal/Cookies.tsx` — split sections 1, 2, 8, 9, 11 into 2 paragraphs each.
-- `src/pages/legal/Disclaimer.tsx` — split risk-warning paragraphs into one risk per paragraph or bullet.
-- `src/pages/legal/AmlKyc.tsx` — split CDD, monitoring, sanctions, STR, training sections into shorter paragraphs and bullet the procedural steps.
-
-No edits to `LegalPage.tsx`, `Footer.tsx`, `Navbar.tsx`, routes, or styles. No new dependencies. The TOC anchors stay identical so the sidebar links keep working.
+## Technical approach
+- Use Tailwind Typography selectors already centralized in `LegalPage.tsx`, not scattered one-off styling.
+- Keep existing legal wording, route structure, anchors, and table-of-contents IDs unchanged.
+- Use existing semantic design tokens where possible and avoid adding unrelated design changes.
+- Verify the `/legal/terms` page after implementation so the first viewport no longer shows headings and body copy running together.
