@@ -3,7 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronDown, LogIn } from "lucide-react";
 import logo from "@/assets/renteaze-logo-white.png";
 
-const navLinks = [
+type Child = { label: string; path: string };
+type NavItem = { label: string; path?: string; children?: Child[] };
+
+const navLinks: NavItem[] = [
   { label: "Home", path: "/" },
   {
     label: "Solutions",
@@ -16,15 +19,20 @@ const navLinks = [
   },
   { label: "Properties", path: "/properties" },
   { label: "Events", path: "/events" },
-  { label: "About", path: "/about" },
-  { label: "Blog", path: "/blog" },
-  { label: "FAQ", path: "/faq" },
-  { label: "Contact", path: "/contact" },
+  {
+    label: "Company",
+    children: [
+      { label: "About", path: "/about" },
+      { label: "Blog", path: "/blog" },
+      { label: "FAQ", path: "/faq" },
+      { label: "Contact", path: "/contact" },
+    ],
+  },
 ];
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -45,14 +53,14 @@ const Navbar = () => {
               <div
                 key={item.label}
                 className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
+                onMouseEnter={() => setOpenMenu(item.label)}
+                onMouseLeave={() => setOpenMenu(null)}
               >
                 <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md hover:bg-primary/20 transition-colors">
                   {item.label}
                   <ChevronDown className="h-3 w-3" />
                 </button>
-                {dropdownOpen && (
+                {openMenu === item.label && (
                   <div className="absolute top-full left-0 mt-1 w-48 bg-card text-card-foreground rounded-lg shadow-lg border py-1">
                     {item.children.map((child) => (
                       <Link
