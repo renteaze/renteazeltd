@@ -30,8 +30,10 @@ const AmlKyc = () => (
     <p>
       Renteaze is committed to preventing the use of its Services for money laundering, terrorism
       financing, proliferation financing, fraud, bribery, tax evasion, and the evasion of
-      international sanctions. This policy applies to all customers, employees, contractors, and
-      third-party partners.
+      international sanctions.
+    </p>
+    <p>
+      This policy applies to all customers, employees, contractors, and third-party partners.
     </p>
 
     <h2 id="framework">2. Regulatory framework</h2>
@@ -44,17 +46,24 @@ const AmlKyc = () => (
 
     <h2 id="governance">3. Governance</h2>
     <p>
-      The Board has overall responsibility for the AML/CFT framework. A Money Laundering Reporting
-      Officer (MLRO) and Chief Compliance Officer oversee day-to-day implementation, file
-      regulatory reports, and report to the Board. The framework is independently reviewed at
-      least annually.
+      The Board has overall responsibility for the AML/CFT framework.
+    </p>
+    <p>
+      A Money Laundering Reporting Officer (MLRO) and Chief Compliance Officer oversee day-to-day
+      implementation, file regulatory reports, and report to the Board.
+    </p>
+    <p>
+      The framework is independently reviewed at least annually.
     </p>
 
     <h2 id="rba">4. Risk-based approach</h2>
     <p>
       We assess customer, product, geographic, channel, and transaction risk and calibrate
-      controls accordingly. Our enterprise-wide risk assessment is reviewed at least annually and
-      whenever there is a material change in business or regulation.
+      controls accordingly.
+    </p>
+    <p>
+      Our enterprise-wide risk assessment is reviewed at least annually and whenever there is a
+      material change in business or regulation.
     </p>
 
     <h2 id="cdd">5. Customer due diligence (CDD)</h2>
@@ -79,9 +88,11 @@ const AmlKyc = () => (
     <h2 id="pep">7. PEP and sanctions screening</h2>
     <p>
       All customers, UBOs, and connected parties are screened at on-boarding and on an ongoing
-      basis against PEP and sanctions lists (UN, OFAC, EU, UK HMT, and local equivalents). Hits
-      are reviewed by Compliance; confirmed sanctions matches result in immediate blocking and
-      regulatory reporting.
+      basis against PEP and sanctions lists (UN, OFAC, EU, UK HMT, and local equivalents).
+    </p>
+    <p>
+      Hits are reviewed by Compliance; confirmed sanctions matches result in immediate blocking
+      and regulatory reporting.
     </p>
 
     <h2 id="sof">8. Source of funds and source of wealth</h2>
@@ -94,9 +105,11 @@ const AmlKyc = () => (
     <h2 id="monitoring">9. Ongoing monitoring</h2>
     <p>
       We monitor transactions and customer activity throughout the relationship using automated
-      rules, behavioural analytics, and human review. Triggered alerts are investigated and
-      documented. We refresh CDD on a periodic, risk-based cadence and whenever a trigger event
-      occurs.
+      rules, behavioural analytics, and human review.
+    </p>
+    <p>
+      Triggered alerts are investigated and documented. We refresh CDD on a periodic, risk-based
+      cadence and whenever a trigger event occurs.
     </p>
 
     <h2 id="str">10. Suspicious transaction reporting</h2>
@@ -104,8 +117,10 @@ const AmlKyc = () => (
       Where Compliance forms a suspicion of money laundering, terrorism financing, or other
       financial crime, we file a Suspicious Transaction Report (STR) with the Nigerian Financial
       Intelligence Unit (NFIU) and any other competent authority, in line with statutory
-      deadlines. <strong>Tipping off the customer is a criminal offence and is strictly
-      prohibited.</strong>
+      deadlines.
+    </p>
+    <p>
+      <strong>Tipping off the customer is a criminal offence and is strictly prohibited.</strong>
     </p>
 
     <h2 id="records">11. Record retention</h2>
@@ -118,8 +133,11 @@ const AmlKyc = () => (
     <h2 id="training">12. Training and culture</h2>
     <p>
       All employees receive mandatory AML/CFT and sanctions training at induction and at least
-      annually, with role-specific training for higher-risk functions. We maintain a confidential
-      whistle-blowing channel and protect those who report concerns in good faith.
+      annually, with role-specific training for higher-risk functions.
+    </p>
+    <p>
+      We maintain a confidential whistle-blowing channel and protect those who report concerns
+      in good faith.
     </p>
 
     <h2 id="cooperation">13. Customer cooperation</h2>

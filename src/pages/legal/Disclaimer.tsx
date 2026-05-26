@@ -27,16 +27,21 @@ const Disclaimer = () => (
     <p>
       This Disclaimer applies to all financial and investment-related information published by
       Renteaze, including content on the website, dashboards, marketing emails, social-media
-      channels, and webinars. It supplements — and does not replace — the deal-specific
-      documentation provided for each opportunity.
+      channels, and webinars.
+    </p>
+    <p>
+      It supplements — and does not replace — the deal-specific documentation provided for each
+      opportunity.
     </p>
 
     <h2 id="no-advice">2. Not investment, legal, or tax advice</h2>
     <p>
       Information on the Services is for general information only and does not constitute
       investment, legal, accounting, or tax advice and is not a personal recommendation,
-      solicitation, or offer to buy or sell any security. You should consult an appropriately
-      licensed adviser before making any investment decision.
+      solicitation, or offer to buy or sell any security.
+    </p>
+    <p>
+      You should consult an appropriately licensed adviser before making any investment decision.
     </p>
 
     <h2 id="risk">3. Investment risk</h2>
@@ -73,27 +78,34 @@ const Disclaimer = () => (
     <h2 id="suitability">7. Suitability</h2>
     <p>
       You are responsible for determining whether any investment is suitable for your
-      circumstances, objectives, risk tolerance, and time horizon. Where we ask suitability
-      questions, your answers must be accurate; we may refuse access to an opportunity if it is
-      not appropriate for you.
+      circumstances, objectives, risk tolerance, and time horizon.
+    </p>
+    <p>
+      Where we ask suitability questions, your answers must be accurate; we may refuse access to
+      an opportunity if it is not appropriate for you.
     </p>
 
     <h2 id="jurisdiction">8. Jurisdictional restrictions</h2>
     <p>
       The Services are operated from Nigeria. Investment opportunities are not directed to, nor
       intended for distribution to or use by, any person in any jurisdiction where such
-      distribution or use would be contrary to local law. In particular, opportunities are
-      generally not registered under the US Securities Act of 1933 and are not being offered to
-      US persons except in reliance on an available exemption.
+      distribution or use would be contrary to local law.
+    </p>
+    <p>
+      In particular, opportunities are generally not registered under the US Securities Act of
+      1933 and are not being offered to US persons except in reliance on an available exemption.
     </p>
 
     <h2 id="regulation">9. Regulatory status</h2>
     <p>
       Renteaze operates in line with applicable Nigerian financial-services regulation, including
       requirements of the Securities and Exchange Commission (SEC) and the Central Bank of
-      Nigeria (CBN) where relevant. We are not authorised by the UK FCA, US SEC, or EU national
-      competent authorities, and opportunities are not protected by deposit-guarantee or
-      investor-compensation schemes of those jurisdictions.
+      Nigeria (CBN) where relevant.
+    </p>
+    <p>
+      We are not authorised by the UK FCA, US SEC, or EU national competent authorities, and
+      opportunities are not protected by deposit-guarantee or investor-compensation schemes of
+      those jurisdictions.
     </p>
 
     <h2 id="tax">10. Tax</h2>

@@ -55,8 +55,13 @@ const Terms = () => (
     <h2 id="eligibility">3. Eligibility</h2>
     <p>
       You must be at least 18 years old and legally able to enter into a binding contract under the
-      laws of your jurisdiction. Some products require additional verification and may be
-      restricted to verified Nigerian residents or, where applicable, Nigerians in the diaspora.
+      laws of your jurisdiction.
+    </p>
+    <p>
+      Some products require additional verification and may be restricted to verified Nigerian
+      residents or, where applicable, Nigerians in the diaspora.
+    </p>
+    <p>
       You confirm you are not located in, or a national or resident of, a jurisdiction subject to
       comprehensive sanctions, and you are not on any sanctions or denied-party list.
     </p>
@@ -80,9 +85,11 @@ const Terms = () => (
     <h2 id="tenant">6. Tenant products — Save for Rent & Loan for Rent</h2>
     <p>
       Tenant products are subject to credit assessment, KYC checks, and the applicable Product
-      Terms presented at sign-up. Savings contributions are held in segregated accounts. Loan
-      terms, interest, fees, and repayment schedules are disclosed before you accept and form a
-      separate credit agreement.
+      Terms presented at sign-up.
+    </p>
+    <p>
+      Savings contributions are held in segregated accounts. Loan terms, interest, fees, and
+      repayment schedules are disclosed before you accept and form a separate credit agreement.
     </p>
 
     <h2 id="landlord">7. Landlord services — Property Management</h2>
@@ -112,17 +119,22 @@ const Terms = () => (
     <p>
       Fees applicable to each product are disclosed before you accept the relevant Product Terms.
       You authorise Renteaze and its payment processors to debit and credit your designated
-      account in accordance with those Product Terms. All amounts are payable in Nigerian Naira
-      unless otherwise stated; foreign-currency conversions use the rate applied by our processor
-      at the time of settlement.
+      account in accordance with those Product Terms.
+    </p>
+    <p>
+      All amounts are payable in Nigerian Naira unless otherwise stated; foreign-currency
+      conversions use the rate applied by our processor at the time of settlement.
     </p>
 
     <h2 id="refunds">11. Refunds and chargebacks</h2>
     <p>
       Eligibility for refunds is set out in the relevant Product Terms and, where applicable, by
-      mandatory consumer-protection law. Initiating a chargeback without first contacting us may
-      result in suspension while we investigate. Misuse of chargebacks may be reported to your card
-      issuer and to fraud databases.
+      mandatory consumer-protection law.
+    </p>
+    <p>
+      Initiating a chargeback without first contacting us may result in suspension while we
+      investigate. Misuse of chargebacks may be reported to your card issuer and to fraud
+      databases.
     </p>
 
     <h2 id="use">12. Acceptable use</h2>
@@ -139,11 +151,15 @@ const Terms = () => (
     <h2 id="ip">13. Intellectual property</h2>
     <p>
       Renteaze, our logos, designs, and platform content are owned by Renteaze International
-      Limited or our licensors and protected by intellectual-property laws. We grant you a
-      limited, revocable, non-exclusive, non-transferable licence to use the Services for their
-      intended purpose. You retain ownership of Content you submit, but grant us a worldwide,
-      royalty-free licence to host, store, reproduce, and display it solely to operate the
-      Services.
+      Limited or our licensors and protected by intellectual-property laws.
+    </p>
+    <p>
+      We grant you a limited, revocable, non-exclusive, non-transferable licence to use the
+      Services for their intended purpose.
+    </p>
+    <p>
+      You retain ownership of Content you submit, but grant us a worldwide, royalty-free licence
+      to host, store, reproduce, and display it solely to operate the Services.
     </p>
 
     <h2 id="third-party">14. Third-party services</h2>
@@ -157,9 +173,14 @@ const Terms = () => (
     <p>
       We may suspend or terminate your Account, with or without notice, if you breach these Terms
       or any Product Terms, if we suspect fraud or illegal activity, if required by law or
-      regulator, or if continued provision would create unacceptable risk. You may close your
-      Account at any time, subject to settling outstanding obligations. Sections that by their
-      nature should survive termination (IP, liability, indemnity, disputes) will survive.
+      regulator, or if continued provision would create unacceptable risk.
+    </p>
+    <p>
+      You may close your Account at any time, subject to settling outstanding obligations.
+    </p>
+    <p>
+      Sections that by their nature should survive termination (IP, liability, indemnity,
+      disputes) will survive.
     </p>
 
     <h2 id="consumer">16. Consumer rights</h2>
@@ -181,11 +202,15 @@ const Terms = () => (
     <p>
       To the maximum extent permitted by law, Renteaze's aggregate liability arising out of or
       related to the Services in any 12-month period will not exceed the greater of: (a) the fees
-      you paid us in that period; or (b) NGN 100,000. We will not be liable for indirect,
-      incidental, consequential, special, exemplary, or punitive damages, or for lost profits,
-      revenue, data, or goodwill. <strong>Nothing in these Terms excludes liability for fraud,
-      death or personal injury caused by negligence, or any liability that cannot lawfully be
-      excluded.</strong>
+      you paid us in that period; or (b) NGN 100,000.
+    </p>
+    <p>
+      We will not be liable for indirect, incidental, consequential, special, exemplary, or
+      punitive damages, or for lost profits, revenue, data, or goodwill.
+    </p>
+    <p>
+      <strong>Nothing in these Terms excludes liability for fraud, death or personal injury
+      caused by negligence, or any liability that cannot lawfully be excluded.</strong>
     </p>
 
     <h2 id="indemnity">19. Indemnity</h2>
@@ -205,18 +230,25 @@ const Terms = () => (
     <h2 id="changes">21. Changes to these terms</h2>
     <p>
       We may update these Terms from time to time. Material changes will be notified through the
-      Services or by email at least 30 days before they take effect. Continued use after the
-      effective date constitutes acceptance. If you do not agree, you should stop using the
-      Services and close your Account.
+      Services or by email at least 30 days before they take effect.
+    </p>
+    <p>
+      Continued use after the effective date constitutes acceptance. If you do not agree, you
+      should stop using the Services and close your Account.
     </p>
 
     <h2 id="disputes">22. Dispute resolution</h2>
     <p>
       Please contact <a href="mailto:legal@renteaze.com">legal@renteaze.com</a> first so we can try
-      to resolve any dispute informally. If we cannot resolve a dispute within 30 days, the
-      dispute will be referred to mediation in Lagos, and failing settlement, to the courts of
-      Lagos State, Nigeria. Where mandatory law gives you the right to bring proceedings in your
-      country of residence, that right is preserved.
+      to resolve any dispute informally.
+    </p>
+    <p>
+      If we cannot resolve a dispute within 30 days, the dispute will be referred to mediation in
+      Lagos, and failing settlement, to the courts of Lagos State, Nigeria.
+    </p>
+    <p>
+      Where mandatory law gives you the right to bring proceedings in your country of residence,
+      that right is preserved.
     </p>
 
     <h2 id="general">23. General</h2>
