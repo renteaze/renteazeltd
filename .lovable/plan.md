@@ -1,49 +1,61 @@
-## The layout bug (why content is squeezed)
+## Scope
 
-`src/components/legal/LegalPage.tsx` wraps the article in a `md:grid-cols-4` grid. The TOC sidebar takes 1 column **only when `tableOfContents` is passed**, and the article only gets `md:col-span-3` **in that same case**. None of the 5 legal pages currently pass a TOC — so the grid still creates 4 columns, the sidebar is absent, and the article falls into a single column (1/4 of the width). That's why every page looks squeezed to one side.
+Three presentation-only fixes:
 
-## Fix
+1. **Legal page typography & rhythm** — content reads cramped and under-paragraphed.
+2. **Footer cleanup** — "Contact" appears in both the Company and Legal columns.
+3. **Navbar slimming** — too many top-level links on desktop and mobile.
 
-**1. Repair the shell** (`src/components/legal/LegalPage.tsx`)
-- When `tableOfContents` is absent: drop the grid entirely, render the article full-width within `max-w-3xl` (proper reading measure).
-- When `tableOfContents` is present: keep the 4-col grid with sticky TOC + `md:col-span-3` article.
-- Tighten prose: `max-w-none` inside the article container, comfortable line-height, sensible heading rhythm.
+No content rewrites, no routing changes, no business logic.
 
-**2. Add a TOC to every page** so the sidebar layout is actually used and users can navigate long legal docs. Each `<h2>` gets a matching `id`.
+---
 
-**3. Rewrite content to global standard** — GDPR (EU/UK) + CCPA/CPRA (California) + NDPA (Nigeria). Every page restructured to match how Stripe / Wise / Revolut publish theirs.
+## 1. Legal pages — spacing & structure
 
-### Privacy Policy (largest rewrite)
-Sections: Who we are & controller identity · Data we collect (categories: identity, financial, KYC, device, usage, cookies) · Sources · Purposes & legal bases (GDPR Art. 6 mapped per purpose) · Sharing & processors · International transfers (SCCs, adequacy) · Retention schedule (table) · Your rights under GDPR (access, rectification, erasure, restriction, portability, objection, withdraw consent) · Your rights under CCPA/CPRA (know, delete, correct, opt-out of sale/sharing, limit sensitive PI, non-discrimination) · Your rights under NDPA · How to exercise rights + verification · Children · Automated decision-making & credit scoring · Security · Breach notification · Complaints (NDPC, ICO, EDPB, California AG) · Contact DPO · Changes.
+File: `src/components/legal/LegalPage.tsx` (shared by all 5 pages, so one edit fixes all).
 
-### Terms of Service
-Add: definitions · electronic contracting · consumer rights (UK CRA / EU consumer directives) · termination & account closure · suspension grounds · refunds & chargebacks · indemnity · warranty disclaimers · force majeure · assignment · severability · entire agreement · dispute resolution (informal → arbitration carve-out / small claims) · notices · contact. Keep Nigerian governing law, but mark mandatory consumer protections that cannot be contracted out of.
+Tighten the `proseClasses` to give the long-form legal copy real breathing room:
 
-### Cookie Policy
-Per-category tables (Strictly necessary / Functional / Analytics / Marketing) with cookie name, purpose, duration, party. Consent model (opt-in EU/UK, opt-out California sale/share via Global Privacy Control), how to withdraw, browser controls, Do Not Track statement, link to preference center.
+- Increase vertical rhythm: `prose-h2:mt-12 prose-h2:mb-5`, `prose-h3:mt-8 prose-h3:mb-3`, `prose-p:my-5`, `prose-p:leading-[1.75]`.
+- Bump base size on desktop: wrap article in `text-[15px] md:text-base`.
+- Lists: `prose-ul:my-5 prose-ul:space-y-2 prose-li:leading-relaxed prose-li:my-1.5`, add `marker:text-primary`.
+- Tables: `prose-table:border prose-table:border-slate-200`, `prose-th:border-b prose-td:border-b prose-td:border-slate-100`, zebra rows via `[&_tbody_tr:nth-child(even)]:bg-slate-50/60`.
+- H2s get a subtle separator: `prose-h2:pb-2 prose-h2:border-b prose-h2:border-slate-200`.
+- Anchored headings already use `scroll-mt-24` — keep.
+- Widen the no-TOC article from `max-w-3xl` to `max-w-3xl md:max-w-[70ch]` for better measure.
+- TOC sidebar: increase link spacing (`py-1.5`) and add a left-border active hint on hover.
 
-### Disclaimer (Investment & Financial)
-Risk warnings (capital at risk, illiquidity, forex, regulatory) · not investment advice · forward-looking statements · past performance · SEC Nigeria positioning · jurisdictional restrictions (not an offer where prohibited) · suitability · tax · third-party content.
+No changes to the 5 page files themselves; they already pass clean `<h2>`/`<p>`/`<ul>`/`<table>` markup that the new prose styles will format correctly.
 
-### AML / KYC Policy
-Regulatory basis (Nigeria MLPPA 2022, CBN AML/CFT regs, FATF) · customer due diligence levels (simplified, standard, enhanced) · PEP & sanctions screening (UN, OFAC, EU, UK HMT) · source of funds · ongoing monitoring · suspicious transaction reporting (NFIU) · record retention (5 years) · sanctions compliance · employee training · refusal/exit grounds · customer cooperation.
+## 2. Footer — remove duplicate links
 
-**4. Shared footer block** in LegalPage stays, but split the disclaimer/contact into: DPO contact (`dpo@renteaze.com`), legal (`legal@renteaze.com`), complaints address (registered office).
+File: `src/components/Footer.tsx`.
 
-## Technical details
+- Remove `Contact` from the **Legal** column (it already lives under **Company** and again as a full Contact column).
+- Remove `Properties` and `Events` from **Quick Links** since they're prominent in the navbar — Quick Links becomes audience-focused only (Tenants, Landlords, Investors, Professionals).
+- Keep the dedicated **Contact Us** column with phone/email/address as-is.
 
-```text
-src/components/legal/LegalPage.tsx     fix grid; conditional layout; TOC always supported
-src/pages/legal/Privacy.tsx            full rewrite + TOC ids
-src/pages/legal/Terms.tsx              full rewrite + TOC ids
-src/pages/legal/Cookies.tsx            full rewrite with cookie tables + TOC
-src/pages/legal/Disclaimer.tsx         full rewrite + TOC
-src/pages/legal/AmlKyc.tsx             full rewrite + TOC
-```
+Result: each link appears exactly once.
 
-No new dependencies. No route changes. Existing `@tailwindcss/typography` `prose` classes handle the long-form formatting.
+## 3. Navbar — slim the header
 
-## Out of scope
+File: `src/components/Navbar.tsx`.
 
-- Cookie consent banner / preference center UI (content references it; building the UI is a separate task — flag if you want it).
-- Actual legal review by counsel. These templates follow public best practice but should be reviewed by a Nigerian-qualified lawyer before going live.
+Desktop top-level becomes: **Home · Solutions ▾ · Properties · Events · Company ▾ · Sign In · Get Started**.
+
+- New **Company** dropdown groups: About, Blog, FAQ, Contact.
+- Remove About / Blog / FAQ / Contact as standalone top-level links.
+- Keep existing **Solutions** dropdown unchanged.
+- Mobile menu: reuse the same grouped structure (Solutions section + Company section), so the drawer is shorter and scannable.
+- Dropdown state: replace single `dropdownOpen` boolean with a keyed value (`openMenu: string | null`) so Solutions and Company don't fight each other.
+
+Footer keeps the secondary links (About, Blog, FAQ) so nothing becomes unreachable.
+
+---
+
+## Technical notes
+
+- Tailwind Typography plugin is already installed — all `prose-*` modifiers above are supported.
+- All colors stay on semantic tokens / existing slate scale already used in the file.
+- No new files, no new dependencies, no route changes.
+- Files touched: `LegalPage.tsx`, `Footer.tsx`, `Navbar.tsx` (3 files total).

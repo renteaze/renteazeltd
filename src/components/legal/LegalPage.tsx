@@ -11,19 +11,21 @@ interface Props {
   children: ReactNode;
 }
 
-const proseClasses = `prose prose-slate max-w-none
+const proseClasses = `prose prose-slate max-w-none text-[15px] md:text-base
   prose-headings:font-bold prose-headings:text-foreground prose-headings:scroll-mt-24
-  prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-  prose-h3:text-lg prose-h3:mt-6 prose-h3:mb-2
-  prose-p:text-slate-700 prose-p:leading-relaxed prose-p:my-4
-  prose-li:text-slate-700 prose-li:my-1
+  prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-5 prose-h2:pb-2 prose-h2:border-b prose-h2:border-slate-200
+  prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3
+  prose-p:text-slate-700 prose-p:leading-[1.75] prose-p:my-5
+  prose-ul:my-5 prose-ul:space-y-2 prose-ol:my-5 prose-ol:space-y-2
+  prose-li:text-slate-700 prose-li:leading-relaxed prose-li:my-1.5 marker:text-primary
   prose-a:text-primary prose-a:no-underline hover:prose-a:underline
   prose-strong:font-semibold prose-strong:text-foreground
   prose-code:bg-slate-100 prose-code:text-red-600 prose-code:px-2 prose-code:py-1 prose-code:rounded
   prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic
-  prose-table:text-sm prose-table:my-6
-  prose-th:bg-slate-100 prose-th:font-semibold prose-th:text-left prose-th:p-3
-  prose-td:py-2 prose-td:px-3 prose-td:align-top
+  prose-table:text-sm prose-table:my-6 prose-table:border prose-table:border-slate-200
+  prose-th:bg-slate-100 prose-th:font-semibold prose-th:text-left prose-th:p-3 prose-th:border-b prose-th:border-slate-200
+  prose-td:py-2.5 prose-td:px-3 prose-td:align-top prose-td:border-b prose-td:border-slate-100
+  [&_tbody_tr:nth-child(even)]:bg-slate-50/60
 `;
 
 const FooterBlock = () => (
@@ -105,12 +107,12 @@ const LegalPage = ({
                   <h3 className="font-bold text-sm text-foreground mb-4 uppercase tracking-wide">
                     Contents
                   </h3>
-                  <nav className="space-y-2 text-sm">
+                  <nav className="space-y-1 text-sm">
                     {tableOfContents!.map((item) => (
                       <a
                         key={item.id}
                         href={`#${item.id}`}
-                        className="block text-slate-600 hover:text-primary transition-colors py-1"
+                        className="block text-slate-600 hover:text-primary hover:border-primary border-l-2 border-transparent pl-3 py-1.5 transition-colors"
                       >
                         {item.label}
                       </a>
@@ -124,7 +126,7 @@ const LegalPage = ({
               </article>
             </div>
           ) : (
-            <article className={`mx-auto max-w-3xl ${proseClasses}`}>
+            <article className={`mx-auto max-w-3xl md:max-w-[70ch] ${proseClasses}`}>
               {children}
               <FooterBlock />
             </article>
