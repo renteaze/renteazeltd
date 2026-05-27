@@ -354,6 +354,7 @@ export type Database = {
           status: Database["public"]["Enums"]["account_status"]
           survey_completed: boolean
           survey_completed_at: string | null
+          survey_email_sent_at: string | null
           tenancy_duration: string | null
           tenancy_end_date: string | null
           tenancy_period: string | null
@@ -425,6 +426,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["account_status"]
           survey_completed?: boolean
           survey_completed_at?: string | null
+          survey_email_sent_at?: string | null
           tenancy_duration?: string | null
           tenancy_end_date?: string | null
           tenancy_period?: string | null
@@ -496,6 +498,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["account_status"]
           survey_completed?: boolean
           survey_completed_at?: string | null
+          survey_email_sent_at?: string | null
           tenancy_duration?: string | null
           tenancy_end_date?: string | null
           tenancy_period?: string | null

@@ -299,6 +299,12 @@ const Survey = () => {
         throw new Error("Could not save your profile. Please sign out and sign in again, then retry.");
       }
 
+      if (!editMode) {
+        supabase.functions
+          .invoke("send-survey-email", { body: {} })
+          .catch((e) => console.error("send-survey-email failed", e));
+      }
+
       await refreshProfile();
       toast.success(editMode ? "Profile updated" : "Profile complete!", {
         description: editMode ? "Your changes have been saved." : "We have personalised your experience.",
