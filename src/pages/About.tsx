@@ -39,10 +39,13 @@ const About = () => (
         <SectionHeading title="Our Story" />
         <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
           <p>
-            Renteaze is a subsidiary of Dapo Okunogbe & Partners, a firm established in 2009 with a vision to professionalize real estate services in Nigeria. Over 15 years, we've managed hundreds of properties, served thousands of clients, and built deep expertise in the Lagos real estate market.
+            Renteaze is a PropTech brand owned and operated by Renteaze International Limited (RC 1768094). The Renteaze® trademark was officially registered on 10 March 2021, marking the formal launch of our mission to modernize property services in Nigeria.
           </p>
           <p>
-            In 2024, we launched Renteaze to bring technology into the equation — combining our real estate knowledge with fintech, AI, and digital platforms to create a PropTech company that truly serves every stakeholder in the property ecosystem.
+            The platform is led by a team with over 15 years of hands-on experience in the Lagos real estate market — managing properties, advising clients, and navigating the realities of renting, owning, and investing in Nigerian property.
+          </p>
+          <p>
+            In 2024, we brought that experience together with technology — fintech rails, AI, and modern digital platforms — to build a PropTech company that genuinely serves every stakeholder in the property ecosystem.
           </p>
           <p>
             Our mission is simple: make renting affordable, property ownership achievable, and real estate investment accessible — for every Nigerian, at home and abroad.
