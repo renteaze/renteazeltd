@@ -231,9 +231,13 @@ const PortalSurvey = () => {
       await supabase.rpc("set_my_crm_tags", { _tags: tags });
 
       if (!editMode) {
-        supabase.functions
-          .invoke("send-survey-email", { body: {} })
-          .catch((e) => console.error("send-survey-email failed", e));
+        try {
+          const { data: emailRes, error: emailErr } = await supabase.functions.invoke("send-survey-email", { body: {} });
+          if (emailErr) console.error("send-survey-email failed", emailErr);
+          else console.log("send-survey-email result", emailRes);
+        } catch (e) {
+          console.error("send-survey-email threw", e);
+        }
       }
 
       await refreshProfile();

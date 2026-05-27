@@ -2,6 +2,13 @@
 // Sends a one-time "we've received your survey" email via Brevo with a
 // branded PDF of the user's survey answers attached. Idempotent: once
 // profiles.survey_email_sent_at is set, further invocations are no-ops.
+//
+// Two modes:
+//   1. User mode  — caller is an authenticated end-user; their own JWT in the
+//      Authorization header. Sends to themselves.
+//   2. Admin mode — caller passes the project's service-role key in the
+//      Authorization header AND a `user_id` in the JSON body. Sends to that
+//      user. Used for backfills.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { PDFDocument, StandardFonts, rgb } from "https://esm.sh/pdf-lib@1.17.1";
@@ -30,7 +37,7 @@ const txt = (v: unknown) =>
 const money = (v: unknown) => {
   const n = typeof v === "number" ? v : parseFloat(String(v ?? ""));
   if (!isFinite(n) || n <= 0) return "—";
-  return "₦" + n.toLocaleString("en-NG");
+  return "NGN " + n.toLocaleString("en-NG");
 };
 
 function withOther(value: unknown, other: unknown) {
@@ -106,12 +113,12 @@ async function buildPdf(profile: Record<string, unknown>): Promise<Uint8Array> {
   const font = await pdf.embedFont(StandardFonts.Helvetica);
   const bold = await pdf.embedFont(StandardFonts.HelveticaBold);
 
-  const brand = rgb(0.83, 0.69, 0.10); // Renteaze gold
+  const brand = rgb(0.83, 0.69, 0.10);
   const ink = rgb(0.1, 0.1, 0.12);
   const muted = rgb(0.4, 0.4, 0.45);
   const rule = rgb(0.85, 0.85, 0.88);
 
-  const pageWidth = 595.28; // A4
+  const pageWidth = 595.28;
   const pageHeight = 841.89;
   const margin = 50;
   const contentWidth = pageWidth - margin * 2;
@@ -136,7 +143,6 @@ async function buildPdf(profile: Record<string, unknown>): Promise<Uint8Array> {
 
   drawHeader();
 
-  // Title
   page.drawText("Survey Response Summary", { x: margin, y, size: 18, font: bold, color: ink });
   y -= 22;
   page.drawText(
@@ -149,7 +155,6 @@ async function buildPdf(profile: Record<string, unknown>): Promise<Uint8Array> {
 
   const sections = buildSections(profile);
 
-  // Simple wrap helper
   const wrap = (text: string, size: number, f = font, maxWidth = contentWidth - 160) => {
     const words = text.split(/\s+/);
     const lines: string[] = [];
@@ -187,7 +192,6 @@ async function buildPdf(profile: Record<string, unknown>): Promise<Uint8Array> {
     y -= 10;
   }
 
-  // Footer on every page
   const pages = pdf.getPages();
   for (let i = 0; i < pages.length; i++) {
     const p = pages[i];
@@ -217,53 +221,37 @@ function toBase64(bytes: Uint8Array): string {
   return btoa(s);
 }
 
-Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+async function sendForUser(
+  admin: ReturnType<typeof createClient>,
+  userId: string,
+  brevoKey: string,
+) {
+  const { data: profile, error: profErr } = await admin
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+  if (profErr || !profile) return { sent: false, error: "Profile not found", status: 404 };
 
-  try {
-    const authHeader = req.headers.get("Authorization") ?? "";
-    const token = authHeader.replace(/^Bearer\s+/i, "");
-    if (!token) return json({ sent: false, error: "Missing auth token" }, 401);
+  if ((profile as Record<string, unknown>).survey_email_sent_at) {
+    return { sent: false, skipped: true, reason: "already_sent", status: 200 };
+  }
+  const email = (profile as Record<string, unknown>).email as string | null;
+  if (!email) return { sent: false, error: "Profile has no email", status: 400 };
 
-    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
-    if (!BREVO_API_KEY) return json({ sent: false, error: "BREVO_API_KEY not configured" }, 500);
+  const pdfBytes = await buildPdf(profile as Record<string, unknown>);
+  const pdfBase64 = toBase64(pdfBytes);
+  const today = new Date().toISOString().slice(0, 10);
+  const fileName = `Renteaze-Survey-${today}.pdf`;
 
-    const userClient = createClient(SUPABASE_URL, ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${token}` } },
-    });
-    const { data: userData, error: userErr } = await userClient.auth.getUser();
-    if (userErr || !userData.user) return json({ sent: false, error: "Invalid session" }, 401);
-    const userId = userData.user.id;
+  const p = profile as Record<string, unknown>;
+  const contactMethod =
+    typeof p.preferred_contact_method === "string" && p.preferred_contact_method
+      ? (p.preferred_contact_method as string).toLowerCase()
+      : "your preferred contact method";
+  const displayName = (p.full_name as string) || (p.first_name as string) || "there";
 
-    const admin = createClient(SUPABASE_URL, SERVICE_KEY);
-    const { data: profile, error: profErr } = await admin
-      .from("profiles")
-      .select("*")
-      .eq("id", userId)
-      .single();
-    if (profErr || !profile) return json({ sent: false, error: "Profile not found" }, 404);
-
-    if (profile.survey_email_sent_at) {
-      return json({ sent: false, skipped: true, reason: "already_sent" });
-    }
-    if (!profile.email) return json({ sent: false, error: "Profile has no email" }, 400);
-
-    const pdfBytes = await buildPdf(profile as Record<string, unknown>);
-    const pdfBase64 = toBase64(pdfBytes);
-    const today = new Date().toISOString().slice(0, 10);
-    const fileName = `Renteaze-Survey-${today}.pdf`;
-
-    const contactMethod =
-      typeof profile.preferred_contact_method === "string" && profile.preferred_contact_method
-        ? profile.preferred_contact_method.toLowerCase()
-        : "your preferred contact method";
-
-    const displayName = (profile.full_name as string) || (profile.first_name as string) || "there";
-
-    const htmlContent = `
+  const htmlContent = `
 <!doctype html>
 <html><body style="margin:0;background:#f6f6f8;font-family:Arial,Helvetica,sans-serif;color:#1a1a1f;">
   <div style="max-width:600px;margin:0 auto;background:#ffffff;">
@@ -294,36 +282,125 @@ Deno.serve(async (req) => {
   </div>
 </body></html>`.trim();
 
-    const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "api-key": BREVO_API_KEY,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
-        to: [{ email: profile.email, name: displayName }],
-        subject: "We've received your Renteaze survey — review in progress",
-        htmlContent,
-        attachment: [{ name: fileName, content: pdfBase64 }],
-      }),
-    });
+  const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": brevoKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
+      to: [{ email, name: displayName }],
+      subject: "We've received your Renteaze survey — review in progress",
+      htmlContent,
+      attachment: [{ name: fileName, content: pdfBase64 }],
+    }),
+  });
 
-    if (!brevoRes.ok) {
-      const errText = await brevoRes.text();
-      console.error("Brevo send failed", brevoRes.status, errText);
-      return json({ sent: false, error: `Brevo ${brevoRes.status}: ${errText}` }, 502);
+  if (!brevoRes.ok) {
+    const errText = await brevoRes.text();
+    console.error("Brevo send failed", brevoRes.status, errText);
+    return { sent: false, error: `Brevo ${brevoRes.status}: ${errText}`, status: 502 };
+  }
+
+  const sentAt = new Date().toISOString();
+  const { error: stampErr } = await admin
+    .from("profiles")
+    .update({ survey_email_sent_at: sentAt })
+    .eq("id", userId);
+  if (stampErr) console.error("Failed to set survey_email_sent_at", stampErr);
+
+  return { sent: true, sent_at: sentAt, status: 200, recipient: email };
+}
+
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+
+  try {
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const BREVO_API_KEY = Deno.env.get("BREVO_API_KEY");
+    if (!BREVO_API_KEY) return json({ sent: false, error: "BREVO_API_KEY not configured" }, 500);
+
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace(/^Bearer\s+/i, "");
+    const internalToken = req.headers.get("x-internal-token") ?? "";
+    const LOVABLE_KEY = Deno.env.get("LOVABLE_API_KEY") ?? "";
+    const isInternalAdmin = LOVABLE_KEY !== "" && internalToken === LOVABLE_KEY;
+    if (!token && !isInternalAdmin) return json({ sent: false, error: "Missing auth token" }, 401);
+
+    const admin = createClient(SUPABASE_URL, SERVICE_KEY);
+
+    // Parse body (may be empty for user-mode self-send)
+    let body: { user_id?: string; user_ids?: string[]; backfill?: boolean } = {};
+    try {
+      const text = await req.text();
+      if (text.trim()) body = JSON.parse(text);
+    } catch {
+      body = {};
     }
 
-    const sentAt = new Date().toISOString();
-    const { error: stampErr } = await admin
-      .from("profiles")
-      .update({ survey_email_sent_at: sentAt })
-      .eq("id", userId);
-    if (stampErr) console.error("Failed to set survey_email_sent_at", stampErr);
+    // Resolve who the caller is. Either the service-role key OR an
+    // authenticated user (whose admin role we'll check below for admin actions).
+    const isServiceRole = token === SERVICE_KEY || isInternalAdmin;
+    let callerUserId: string | null = null;
+    let callerIsAdmin = false;
+    if (!isServiceRole && token) {
+      const userClient = createClient(SUPABASE_URL, ANON_KEY, {
+        global: { headers: { Authorization: `Bearer ${token}` } },
+      });
+      const { data: userData, error: userErr } = await userClient.auth.getUser();
+      if (userErr || !userData.user) return json({ sent: false, error: "Invalid session" }, 401);
+      callerUserId = userData.user.id;
+      const { data: roleRow } = await admin
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", callerUserId)
+        .eq("role", "admin")
+        .maybeSingle();
+      callerIsAdmin = !!roleRow;
+    }
 
-    return json({ sent: true, sent_at: sentAt });
+    const isAdminCaller = isServiceRole || callerIsAdmin;
+
+    // Admin actions: backfill or send for specific user(s)
+    if (isAdminCaller && (body.backfill || body.user_id || body.user_ids)) {
+      if (body.backfill) {
+        const { data: rows, error } = await admin
+          .from("profiles")
+          .select("id, email")
+          .eq("survey_completed", true)
+          .is("survey_email_sent_at", null)
+          .not("email", "is", null);
+        if (error) return json({ sent: false, error: error.message }, 500);
+        const results: unknown[] = [];
+        for (const r of rows ?? []) {
+          const res = await sendForUser(admin, (r as { id: string }).id, BREVO_API_KEY);
+          results.push({ user_id: (r as { id: string }).id, ...res });
+        }
+        return json({ backfill: true, count: results.length, results });
+      }
+
+      const targetIds = body.user_ids ?? (body.user_id ? [body.user_id] : []);
+      const results = [];
+      for (const id of targetIds) {
+        const res = await sendForUser(admin, id, BREVO_API_KEY);
+        results.push({ user_id: id, ...res });
+      }
+      return json({ admin: true, results });
+    }
+
+    // Service role with no target is not allowed (avoids accidental sends)
+    if (isServiceRole) {
+      return json({ sent: false, error: "Service-role calls require user_id, user_ids, or backfill:true" }, 400);
+    }
+
+    // User mode: send to the authenticated caller
+    if (!callerUserId) return json({ sent: false, error: "Invalid session" }, 401);
+    const res = await sendForUser(admin, callerUserId, BREVO_API_KEY);
+    return json(res, res.status ?? 200);
   } catch (e) {
     console.error(e);
     return json({ sent: false, error: (e as Error).message }, 500);

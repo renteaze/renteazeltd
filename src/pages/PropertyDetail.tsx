@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/carousel";
 import Layout from "@/components/PortalAwareLayout";
 import { properties } from "@/data/properties";
+import { waLink } from "@/config/contact";
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,9 +22,9 @@ const PropertyDetail = () => {
 
   if (!property) return <Navigate to="/properties" replace />;
 
-  const waLink = `https://wa.me/2348000000000?text=${encodeURIComponent(
+  const waHref = waLink(
     `Hello Renteaze, I'm interested in "${property.title}" in ${property.location}.`
-  )}`;
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,7 +150,7 @@ const PropertyDetail = () => {
                     <Textarea id="enq-msg" rows={3} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="mt-1" placeholder="When would you like to view?" />
                   </div>
                   <Button type="submit" className="w-full bg-primary text-primary-foreground">Send Enquiry</Button>
-                  <a href={waLink} target="_blank" rel="noopener noreferrer" className="block">
+                  <a href={waHref} target="_blank" rel="noopener noreferrer" className="block">
                     <Button type="button" variant="outline" className="w-full gap-2 border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white">
                       <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
                     </Button>

@@ -5,6 +5,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { WHATSAPP_NUMBER } from "@/config/contact";
 
 export type LandingRole = "tenant" | "landlord" | "investor" | "professional";
 
@@ -22,7 +23,7 @@ const LandingForm = ({
   product,
   role,
   ctaLabel = "Get started",
-  whatsappNumber = "2348000000000",
+  whatsappNumber = WHATSAPP_NUMBER,
   extraFields,
   successTitle = "Thanks — we'll be in touch shortly.",
   successDescription = "Continue to create your account and finish setup.",

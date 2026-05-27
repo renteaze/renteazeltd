@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageCircle } from "lucide-react";
+import { waLink } from "@/config/contact";
 
 interface LeadCaptureFormProps {
   persona?: "tenant" | "landlord" | "investor" | "general";
@@ -36,7 +37,7 @@ const LeadCaptureForm = ({ persona = "general", className = "" }: LeadCaptureFor
     setForm({ name: "", email: "", phone: "", enquiryType: "", message: "" });
   };
 
-  const waLink = `https://wa.me/2348000000000?text=${encodeURIComponent(whatsappMessages[persona])}`;
+  const waHref = waLink(whatsappMessages[persona]);
 
   return (
     <div className={className}>
@@ -86,7 +87,7 @@ const LeadCaptureForm = ({ persona = "general", className = "" }: LeadCaptureFor
             Send Enquiry
           </Button>
           <a
-            href={waLink}
+            href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1"

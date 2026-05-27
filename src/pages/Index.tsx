@@ -278,7 +278,7 @@ const Index = () => (
               Explore Investment Opportunities <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <a href="https://wa.me/2348000000000?text=Hello%20Renteaze%2C%20I%27m%20a%20diaspora%20investor%20interested%20in%20opportunities" target="_blank" rel="noopener noreferrer">
+          <a href="https://wa.me/2348155020177?text=Hello%20Renteaze%2C%20I%27m%20a%20diaspora%20investor%20interested%20in%20opportunities" target="_blank" rel="noopener noreferrer">
             <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
               Speak to an Advisor
             </Button>
