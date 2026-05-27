@@ -485,7 +485,7 @@ const Survey = () => {
         )}
         {group === 4 && isTenant && (
           <>
-            <div><Label>Rent payment ease</Label>{SEL("q15",[
+            <div><Label>How easy is your rent payment?</Label>{SEL("q15",[
               {v:"1",l:"1 — Very Easy"},{v:"2",l:"2 — Easy"},{v:"3",l:"3 — Neutral"},{v:"4",l:"4 — Difficult"},{v:"5",l:"5 — Not Easy"},
             ], "Rate from 1 to 5")}</div>
             <div><Label>Pay on/before due date?</Label>{SEL("q16",[{v:"always",l:"Always"},{v:"sometimes",l:"Sometimes"},{v:"never",l:"Never"}], "Select an option")}</div>
