@@ -11,7 +11,7 @@ const values = [
 ];
 
 const team = [
-  { name: "Dapo Okunogbe", role: "Founder & CEO", bio: "Licensed estate surveyor & valuer with 15+ years of experience in Nigerian real estate. Founded Dapo Okunogbe & Partners in 2009." },
+  { name: "Dapo Okunogbe", role: "Founder & CEO", bio: "Licensed estate surveyor & valuer with 15+ years of experience in Nigerian real estate, bringing deep market expertise to the Renteaze platform." },
   { name: "Operations Team", role: "Property Management", bio: "A dedicated team of property managers, facility engineers, and client relationship officers across Lagos." },
   { name: "Technology Team", role: "Platform Development", bio: "Engineers and product designers building the technology that powers Renteaze's PropTech ecosystem." },
 ];
@@ -25,10 +25,10 @@ const About = () => (
           Making Real Estate <span className="text-accent">Work for Everyone</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Born from 15+ years of Nigerian real estate expertise, Renteaze is transforming how people rent, own, and invest in property.
+          Built on 15+ years of Nigerian real estate expertise, Renteaze is transforming how people rent, own, and invest in property.
         </p>
         <p className="mt-4 text-xs text-muted-foreground/80">
-          Renteaze is operated by Renteaze International Limited (RC 1768094).
+          Renteaze® is a registered trademark of Renteaze International Limited (RC 1768094), registered on 10 March 2021.
         </p>
       </div>
     </section>
@@ -39,10 +39,13 @@ const About = () => (
         <SectionHeading title="Our Story" />
         <div className="prose prose-lg max-w-none text-muted-foreground space-y-4">
           <p>
-            Renteaze is a subsidiary of Dapo Okunogbe & Partners, a firm established in 2009 with a vision to professionalize real estate services in Nigeria. Over 15 years, we've managed hundreds of properties, served thousands of clients, and built deep expertise in the Lagos real estate market.
+            Renteaze is a PropTech brand owned and operated by Renteaze International Limited (RC 1768094). The Renteaze® trademark was officially registered on 10 March 2021, marking the formal launch of our mission to modernize property services in Nigeria.
           </p>
           <p>
-            In 2024, we launched Renteaze to bring technology into the equation — combining our real estate knowledge with fintech, AI, and digital platforms to create a PropTech company that truly serves every stakeholder in the property ecosystem.
+            The platform is led by a team with over 15 years of hands-on experience in the Lagos real estate market — managing properties, advising clients, and navigating the realities of renting, owning, and investing in Nigerian property.
+          </p>
+          <p>
+            In 2024, we brought that experience together with technology — fintech rails, AI, and modern digital platforms — to build a PropTech company that genuinely serves every stakeholder in the property ecosystem.
           </p>
           <p>
             Our mission is simple: make renting affordable, property ownership achievable, and real estate investment accessible — for every Nigerian, at home and abroad.
@@ -124,11 +127,12 @@ const About = () => (
         <SectionHeading title="Credentials & Accreditations" />
         <div className="space-y-3">
           {[
-            "Corporate Affairs Commission — RC 1768094",
-            "Licensed Estate Surveyors and Valuers",
+            "Renteaze International Limited — incorporated with the Corporate Affairs Commission (RC 1768094)",
+            "Renteaze® — registered trademark of Renteaze International Limited (registered 10 March 2021)",
+            "Licensed Estate Surveyors and Valuers on the leadership team",
             "Member, Nigerian Institution of Estate Surveyors and Valuers (NIESV)",
             "Member, Real Estate Developers Association of Nigeria (REDAN)",
-            "15+ years in Nigerian real estate market",
+            "15+ years of leadership experience in the Nigerian real estate market",
           ].map((item) => (
             <div key={item} className="flex items-center gap-3">
               <CheckCircle2 className="h-5 w-5 text-accent shrink-0" />

@@ -14,8 +14,8 @@ const products = [
 ];
 
 const trustSignals = [
-  "Registered with CAC — RC 1768094",
-  "Subsidiary of Dapo Okunogbe & Partners (Est. 2009)",
+  "Renteaze International Limited — registered with CAC (RC 1768094)",
+  "Renteaze® — registered trademark since 10 March 2021",
   "Licensed estate surveyors and valuers",
   "Transparent reporting and regular updates",
   "Legal safeguards on all investments",
