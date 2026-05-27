@@ -25,10 +25,10 @@ const About = () => (
           Making Real Estate <span className="text-accent">Work for Everyone</span>
         </h1>
         <p className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto">
-          Born from 15+ years of Nigerian real estate expertise, Renteaze is transforming how people rent, own, and invest in property.
+          Built on 15+ years of Nigerian real estate expertise, Renteaze is transforming how people rent, own, and invest in property.
         </p>
         <p className="mt-4 text-xs text-muted-foreground/80">
-          Renteaze is operated by Renteaze International Limited (RC 1768094).
+          Renteaze® is a registered trademark of Renteaze International Limited (RC 1768094), registered on 10 March 2021.
         </p>
       </div>
     </section>
