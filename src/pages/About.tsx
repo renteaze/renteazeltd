@@ -127,11 +127,12 @@ const About = () => (
         <SectionHeading title="Credentials & Accreditations" />
         <div className="space-y-3">
           {[
-            "Corporate Affairs Commission — RC 1768094",
-            "Licensed Estate Surveyors and Valuers",
+            "Renteaze International Limited — incorporated with the Corporate Affairs Commission (RC 1768094)",
+            "Renteaze® — registered trademark of Renteaze International Limited (registered 10 March 2021)",
+            "Licensed Estate Surveyors and Valuers on the leadership team",
             "Member, Nigerian Institution of Estate Surveyors and Valuers (NIESV)",
             "Member, Real Estate Developers Association of Nigeria (REDAN)",
-            "15+ years in Nigerian real estate market",
+            "15+ years of leadership experience in the Nigerian real estate market",
           ].map((item) => (
             <div key={item} className="flex items-center gap-3">
               <CheckCircle2 className="h-5 w-5 text-accent shrink-0" />
