@@ -11,7 +11,7 @@ const values = [
 ];
 
 const team = [
-  { name: "Dapo Okunogbe", role: "Founder & CEO", bio: "Licensed estate surveyor & valuer with 15+ years of experience in Nigerian real estate. Founded Dapo Okunogbe & Partners in 2009." },
+  { name: "Dapo Okunogbe", role: "Founder & CEO", bio: "Licensed estate surveyor & valuer with 15+ years of experience in Nigerian real estate, bringing deep market expertise to the Renteaze platform." },
   { name: "Operations Team", role: "Property Management", bio: "A dedicated team of property managers, facility engineers, and client relationship officers across Lagos." },
   { name: "Technology Team", role: "Platform Development", bio: "Engineers and product designers building the technology that powers Renteaze's PropTech ecosystem." },
 ];
