@@ -295,13 +295,16 @@ export type Database = {
       profiles: {
         Row: {
           accommodation_type: string | null
+          accommodation_type_other: string | null
           account_manager_id: string | null
           acquisition_source: string | null
+          acquisition_source_other: string | null
           address: string | null
           address_lat: number | null
           address_lon: number | null
           address_of_residence: string | null
           age_range: string | null
+          annual_rent_amount: number | null
           annual_rent_range: string | null
           avatar_url: string | null
           bank_account_number: string | null
@@ -323,6 +326,7 @@ export type Database = {
           kyc_status: Database["public"]["Enums"]["kyc_status"]
           last_name: string | null
           marital_status: string | null
+          marital_status_other: string | null
           marketing_consent: boolean
           nin: string | null
           nin_verified: boolean
@@ -333,36 +337,45 @@ export type Database = {
           office_lon: number | null
           pays_on_time: string | null
           pays_rent_to: string | null
+          pays_rent_to_other: string | null
           phone: string | null
           phone_verified: boolean
           preferred_contact_method: string | null
+          preferred_contact_windows: Json | null
           profession_type: string | null
           professional_association: string | null
           referral_code: string | null
           referred_by: string | null
           rent_payment_ease: number | null
           rent_payment_method: string | null
+          rent_payment_method_other: string | null
           sought_rent_help_before: boolean | null
           state_of_residence: string | null
           status: Database["public"]["Enums"]["account_status"]
           survey_completed: boolean
           survey_completed_at: string | null
           tenancy_duration: string | null
+          tenancy_end_date: string | null
           tenancy_period: string | null
           tenancy_property_type: string | null
+          tenancy_property_type_other: string | null
+          tenancy_start_date: string | null
           toilets: number | null
           updated_at: string
           years_experience: string | null
         }
         Insert: {
           accommodation_type?: string | null
+          accommodation_type_other?: string | null
           account_manager_id?: string | null
           acquisition_source?: string | null
+          acquisition_source_other?: string | null
           address?: string | null
           address_lat?: number | null
           address_lon?: number | null
           address_of_residence?: string | null
           age_range?: string | null
+          annual_rent_amount?: number | null
           annual_rent_range?: string | null
           avatar_url?: string | null
           bank_account_number?: string | null
@@ -384,6 +397,7 @@ export type Database = {
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           last_name?: string | null
           marital_status?: string | null
+          marital_status_other?: string | null
           marketing_consent?: boolean
           nin?: string | null
           nin_verified?: boolean
@@ -394,36 +408,45 @@ export type Database = {
           office_lon?: number | null
           pays_on_time?: string | null
           pays_rent_to?: string | null
+          pays_rent_to_other?: string | null
           phone?: string | null
           phone_verified?: boolean
           preferred_contact_method?: string | null
+          preferred_contact_windows?: Json | null
           profession_type?: string | null
           professional_association?: string | null
           referral_code?: string | null
           referred_by?: string | null
           rent_payment_ease?: number | null
           rent_payment_method?: string | null
+          rent_payment_method_other?: string | null
           sought_rent_help_before?: boolean | null
           state_of_residence?: string | null
           status?: Database["public"]["Enums"]["account_status"]
           survey_completed?: boolean
           survey_completed_at?: string | null
           tenancy_duration?: string | null
+          tenancy_end_date?: string | null
           tenancy_period?: string | null
           tenancy_property_type?: string | null
+          tenancy_property_type_other?: string | null
+          tenancy_start_date?: string | null
           toilets?: number | null
           updated_at?: string
           years_experience?: string | null
         }
         Update: {
           accommodation_type?: string | null
+          accommodation_type_other?: string | null
           account_manager_id?: string | null
           acquisition_source?: string | null
+          acquisition_source_other?: string | null
           address?: string | null
           address_lat?: number | null
           address_lon?: number | null
           address_of_residence?: string | null
           age_range?: string | null
+          annual_rent_amount?: number | null
           annual_rent_range?: string | null
           avatar_url?: string | null
           bank_account_number?: string | null
@@ -445,6 +468,7 @@ export type Database = {
           kyc_status?: Database["public"]["Enums"]["kyc_status"]
           last_name?: string | null
           marital_status?: string | null
+          marital_status_other?: string | null
           marketing_consent?: boolean
           nin?: string | null
           nin_verified?: boolean
@@ -455,23 +479,29 @@ export type Database = {
           office_lon?: number | null
           pays_on_time?: string | null
           pays_rent_to?: string | null
+          pays_rent_to_other?: string | null
           phone?: string | null
           phone_verified?: boolean
           preferred_contact_method?: string | null
+          preferred_contact_windows?: Json | null
           profession_type?: string | null
           professional_association?: string | null
           referral_code?: string | null
           referred_by?: string | null
           rent_payment_ease?: number | null
           rent_payment_method?: string | null
+          rent_payment_method_other?: string | null
           sought_rent_help_before?: boolean | null
           state_of_residence?: string | null
           status?: Database["public"]["Enums"]["account_status"]
           survey_completed?: boolean
           survey_completed_at?: string | null
           tenancy_duration?: string | null
+          tenancy_end_date?: string | null
           tenancy_period?: string | null
           tenancy_property_type?: string | null
+          tenancy_property_type_other?: string | null
+          tenancy_start_date?: string | null
           toilets?: number | null
           updated_at?: string
           years_experience?: string | null
