@@ -33,8 +33,12 @@ const AuthShell = ({ step, children }: AuthShellProps) => (
         {children}
       </div>
     </main>
-    <footer className="text-center py-4 text-xs text-muted-foreground">
-      &copy; {new Date().getFullYear()} Renteaze International Ltd | RC 1768094
+    <footer className="text-center py-4 px-4 text-xs text-muted-foreground space-y-1">
+      <p>
+        Renteaze is a PropTech platform, not a financial institution. Financial products are provided by licensed partners.{" "}
+        <Link to="/legal/disclaimer" className="underline hover:text-primary">Learn more</Link>.
+      </p>
+      <p>&copy; {new Date().getFullYear()} Renteaze International Ltd · RC 1768094 · Renteaze® registered 10 Mar 2021</p>
     </footer>
   </div>
 );
