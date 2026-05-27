@@ -85,14 +85,14 @@ const Footer = () => (
             </li>
             <li className="flex items-center gap-2">
               <Phone className="h-4 w-4 shrink-0 text-accent" />
-              <a href="tel:+2348000000000" className="hover:text-accent transition-colors">
-                +234 800 000 0000
+              <a href="tel:+2348155020177" className="hover:text-accent transition-colors">
+                +234 815 502 0177
               </a>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-4 w-4 shrink-0 text-accent" />
-              <a href="mailto:info@renteaze.com" className="hover:text-accent transition-colors">
-                info@renteaze.com
+              <a href="mailto:hello@renteaze.com" className="hover:text-accent transition-colors">
+                hello@renteaze.com
               </a>
             </li>
           </ul>
