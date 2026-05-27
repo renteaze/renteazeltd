@@ -9,6 +9,7 @@ import {
 import { useAuth, type AppRole } from "@/hooks/useAuth";
 import UserMenu from "@/components/UserMenu";
 import logo from "@/assets/renteaze-logo-white.png";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 type NavItem = { label: string; path: string; icon: typeof Home };
 
@@ -93,10 +94,20 @@ const PortalShell = ({ role, children }: PortalShellProps) => {
         <Link to="/" className="inline-flex items-center bg-background rounded-md px-3 py-1.5">
           <img src={logo} alt="Renteaze" className="h-7" />
         </Link>
-        <p className="mt-3 text-sm font-medium truncate">{profile?.full_name || "Member"}</p>
-        <span className="inline-block mt-1 text-[10px] uppercase tracking-wider bg-white/15 px-2 py-0.5 rounded">
-          {role}
-        </span>
+        <div className="mt-3 flex items-center gap-2.5">
+          <Avatar className="h-9 w-9 ring-1 ring-white/20">
+            <AvatarImage src={(profile?.avatar_url as string) || undefined} alt={profile?.full_name || "Member"} />
+            <AvatarFallback className="bg-white/15 text-white text-xs">
+              {(profile?.first_name?.[0] || profile?.full_name?.[0] || "M").toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <p className="text-sm font-medium truncate">{profile?.full_name || profile?.first_name || "Member"}</p>
+            <span className="inline-block text-[10px] uppercase tracking-wider bg-white/15 px-2 py-0.5 rounded">
+              {role}
+            </span>
+          </div>
+        </div>
       </div>
       <nav className="flex-1 py-3">
         {items.map((item) => {

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Settings as SettingsIcon, LogOut, ChevronDown, ClipboardList } from "lucide-react";
 import { useAuth, type AppRole } from "@/hooks/useAuth";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface UserMenuProps {
   role?: AppRole;
@@ -46,11 +47,14 @@ const UserMenu = ({ role = "tenant" }: UserMenuProps) => {
         className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-muted transition-colors group"
         aria-label="User menu"
       >
-        <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-semibold">
-          {(profile?.first_name?.[0] || "U").toUpperCase()}
-        </div>
-        <span className="hidden md:inline text-sm font-medium max-w-[120px] truncate">
-          {profile?.first_name || "Member"}
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={(profile?.avatar_url as string) || undefined} alt={profile?.full_name || "Member"} />
+          <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+            {(profile?.first_name?.[0] || profile?.full_name?.[0] || "U").toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <span className="hidden md:inline text-sm font-medium max-w-[140px] truncate">
+          {profile?.full_name || profile?.first_name || "Member"}
         </span>
         <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors hidden md:inline" />
       </button>

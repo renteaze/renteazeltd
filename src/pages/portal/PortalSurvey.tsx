@@ -221,7 +221,7 @@ const PortalSurvey = () => {
         sought_rent_help_before: a.q18 ? a.q18 === "yes" : null,
         interested_in_platform: a.q19,
         acquisition_source: a.q20 || null,
-        acquisition_source_other: a.q20 === "other" ? a.q20_other || null : null,
+        acquisition_source_other: ["agent", "event", "social", "other"].includes(a.q20) ? a.q20_other || null : null,
         preferred_contact_method: a.q21 || null,
         preferred_contact_windows: a.q21 === "call" && contactWindows.length > 0 ? JSON.stringify(contactWindows) : null,
         marketing_consent: a.q22 === "yes",
@@ -546,7 +546,16 @@ const PortalSurvey = () => {
                   { v: "ad", l: "Advertisement" },
                   { v: "other", l: "Other" },
                 ])}
-                {a.q20 === "other" && <OtherInput name="q20" value={a.q20_other||""} onChange={(v)=>set("q20_other",v)} />}
+                {(() => {
+                  const specMap: Record<string, { label: string; placeholder: string }> = {
+                    agent: { label: "Name of the agent or professional", placeholder: "e.g. Jane Doe / ABC Realty" },
+                    event: { label: "Which event or seminar?", placeholder: "e.g. PropTech Lagos 2026" },
+                    social: { label: "Which social media platform?", placeholder: "e.g. Instagram, LinkedIn, TikTok" },
+                    other: { label: "Please specify", placeholder: "Enter details..." },
+                  };
+                  const spec = specMap[a.q20];
+                  return spec ? <OtherInput name="q20" value={a.q20_other||""} onChange={(v)=>set("q20_other",v)} label={spec.label} placeholder={spec.placeholder} /> : null;
+                })()}
               </div>
 
               <div>

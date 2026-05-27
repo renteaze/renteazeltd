@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Save, Mail, Phone, User, MessageCircle } from "lucide-react";
+import { Loader2, Save, Mail, Phone, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import {
   Form,
@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -23,12 +22,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
 const profileSchema = z.object({
-  first_name: z.string().min(1, "First name is required").optional().or(z.literal("")),
-  last_name: z.string().optional().or(z.literal("")),
+  first_name: z.string().trim().max(80).optional().or(z.literal("")),
+  last_name: z.string().trim().max(80).optional().or(z.literal("")),
   email: z.string().email("Invalid email").optional().or(z.literal("")),
-  phone: z.string().optional().or(z.literal("")),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
   avatar_url: z.string().optional().or(z.literal("")),
-  bio: z.string().optional().or(z.literal("")),
   preferred_contact_method: z.enum(["email", "whatsapp", "call"]).optional().or(z.literal("")),
 });
 
@@ -48,8 +46,12 @@ const ProfileEditForm = () => {
       email: (profile?.email as string) || "",
       phone: (profile?.phone as string) || "",
       avatar_url: (profile?.avatar_url as string) || "",
-      bio: ((profile as any)?.bio as string) || "",
-      preferred_contact_method: (((profile as any)?.preferred_contact_method as "email" | "whatsapp" | "call" | null) || "") as "" | "email" | "whatsapp" | "call",
+      preferred_contact_method:
+        ((profile?.preferred_contact_method as "email" | "whatsapp" | "call" | null) || "") as
+          | ""
+          | "email"
+          | "whatsapp"
+          | "call",
     },
   });
 
@@ -61,14 +63,15 @@ const ProfileEditForm = () => {
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setAvatarFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be 5MB or smaller");
+      return;
     }
+    setAvatarFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setAvatarPreview(reader.result as string);
+    reader.readAsDataURL(file);
   };
 
   const onSubmit = async (values: ProfileFormValues) => {
@@ -76,46 +79,48 @@ const ProfileEditForm = () => {
 
     setSubmitting(true);
     try {
-      let avatar_url = values.avatar_url;
+      let avatar_url = values.avatar_url || null;
 
-      // Upload avatar if changed
+      // Upload avatar to public `avatars` bucket — RLS expects path `${user.id}/...`
       if (avatarFile) {
-        const fileExt = avatarFile.name.split(".").pop();
-        const fileName = `${profile.id}-${Date.now()}.${fileExt}`;
-        const filePath = `avatars/${fileName}`;
+        const fileExt = avatarFile.name.split(".").pop() || "jpg";
+        const filePath = `${profile.id}/${Date.now()}.${fileExt}`;
 
         const { error: uploadError } = await supabase.storage
-          .from("tenant-documents") // Using tenant-documents bucket; ideally should be a separate avatars bucket
-          .upload(filePath, avatarFile, { upsert: true });
+          .from("avatars")
+          .upload(filePath, avatarFile, { upsert: true, cacheControl: "3600" });
 
         if (uploadError) throw uploadError;
 
-        const { data } = supabase.storage
-          .from("tenant-documents")
-          .getPublicUrl(filePath);
+        const { data } = supabase.storage.from("avatars").getPublicUrl(filePath);
         avatar_url = data.publicUrl;
       }
 
-      // Update profile
+      const first = (values.first_name || "").trim();
+      const last = (values.last_name || "").trim();
+      const full_name = `${first} ${last}`.trim() || null;
+
       const { error } = await supabase
         .from("profiles")
         .update({
-          first_name: values.first_name || null,
-          last_name: values.last_name || null,
-          phone: values.phone || null,
-          avatar_url: avatar_url || null,
-          ...({ bio: values.bio || null } as any),
-          ...({ preferred_contact_method: values.preferred_contact_method || null } as any),
+          first_name: first || null,
+          last_name: last || null,
+          full_name,
+          phone: values.phone?.trim() || null,
+          avatar_url,
+          preferred_contact_method: values.preferred_contact_method || null,
         })
         .eq("id", profile.id);
 
       if (error) throw error;
 
       toast.success("Profile updated successfully");
+      setAvatarFile(null);
       await refreshProfile();
     } catch (error) {
       console.error("Failed to update profile:", error);
-      toast.error("Failed to update profile");
+      const msg = error instanceof Error ? error.message : "Failed to update profile";
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -123,7 +128,6 @@ const ProfileEditForm = () => {
 
   return (
     <div className="space-y-6">
-      {/* Avatar section */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Profile Picture</h3>
         <div className="flex items-center gap-6">
@@ -152,7 +156,6 @@ const ProfileEditForm = () => {
         </div>
       </Card>
 
-      {/* Form section */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-6">Personal Information</h3>
         <Form {...form}>
@@ -240,28 +243,6 @@ const ProfileEditForm = () => {
                     </SelectContent>
                   </Select>
                   <FormDescription>How we should reach out about updates and offers.</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <User className="h-4 w-4" /> Bio
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little about yourself..."
-                      className="resize-none"
-                      rows={4}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Max 500 characters</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
