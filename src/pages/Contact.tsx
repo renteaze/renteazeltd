@@ -47,7 +47,7 @@ const Contact = () => (
                   <Phone className="h-6 w-6 text-primary shrink-0 mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Phone</h4>
-                    <a href="tel:+2348000000000" className="text-sm text-muted-foreground hover:text-primary transition-colors">+234 800 000 0000</a>
+                    <a href="tel:+2348155020177" className="text-sm text-muted-foreground hover:text-primary transition-colors">+234 815 502 0177</a>
                   </div>
                 </CardContent>
               </Card>
@@ -56,7 +56,7 @@ const Contact = () => (
                   <Mail className="h-6 w-6 text-primary shrink-0 mt-1" />
                   <div>
                     <h4 className="font-semibold mb-1">Email</h4>
-                    <a href="mailto:info@renteaze.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">info@renteaze.com</a>
+                    <a href="mailto:hello@renteaze.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">hello@renteaze.com</a>
                   </div>
                 </CardContent>
               </Card>
