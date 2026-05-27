@@ -21,7 +21,7 @@ const differentiators = [
   { icon: Shield, title: "Trust & Transparency", desc: "Clear pricing, verified properties, and honest contracts. No hidden agent fees, no surprises at move-in." },
   { icon: Wallet, title: "Flexible Rent Solutions", desc: "Pay rent monthly, save toward annual rent, or access rent loans. We meet you where your cashflow is." },
   { icon: Home, title: "End-to-End Property Care", desc: "From tenant screening to facility maintenance, we manage the full lifecycle so landlords earn without the headaches." },
-  { icon: Building2, title: "Backed by 15+ Years of Real Estate", desc: "Rooted in Dapo Okunogbe & Partners' deep Lagos market experience — not a startup guessing its way through." },
+  { icon: Building2, title: "Backed by 15+ Years of Real Estate", desc: "Led by a team with deep Lagos real estate experience — not a startup guessing its way through." },
 ];
 
 const tenantSteps = [
