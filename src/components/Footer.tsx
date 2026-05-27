@@ -99,9 +99,23 @@ const Footer = () => (
         </div>
       </div>
 
-      <div className="border-t border-primary/20 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-        <p>&copy; {new Date().getFullYear()} Renteaze. All rights reserved.</p>
-        <p>Operated by Renteaze International Limited (RC 1768094)</p>
+      <div className="border-t border-primary/20 mt-10 pt-6 space-y-4 text-xs text-muted-foreground">
+        <div className="leading-relaxed space-y-2">
+          <p>
+            <strong className="text-navy-foreground">Renteaze is a PropTech company — not a bank, deposit-taking institution, securities dealer, fund manager, or licensed financial-services provider.</strong>{" "}
+            We provide property-technology services that help users rent, manage, and access real estate more easily. Any rent financing, savings, payment, escrow, insurance, or investment products surfaced on the platform are offered and operated by our licensed partners — including banks, microfinance institutions, payment service providers, insurers, and entities regulated by the Central Bank of Nigeria (CBN) and the Securities and Exchange Commission (SEC) — who are solely responsible for those products and their terms.
+          </p>
+          <p>
+            Nothing on this site constitutes investment, legal, or tax advice. All investments carry risk, including possible loss of capital. Please review our{" "}
+            <Link to="/legal/disclaimer" className="underline hover:text-accent">Disclaimer</Link>,{" "}
+            <Link to="/legal/terms" className="underline hover:text-accent">Terms of Service</Link>, and{" "}
+            <Link to="/legal/privacy" className="underline hover:text-accent">Privacy Policy</Link>.
+          </p>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2 pt-4 border-t border-primary/10">
+          <p>&copy; {new Date().getFullYear()} Renteaze. All rights reserved.</p>
+          <p>Renteaze® is a registered trademark of Renteaze International Limited (RC 1768094) — registered 10 March 2021.</p>
+        </div>
       </div>
     </div>
   </footer>
