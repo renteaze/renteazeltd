@@ -2,7 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import AuthShell from "@/components/auth/AuthShell";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,6 +42,8 @@ const SignUpDetails = () => {
     profession: "", association: "", years: "", terms: false,
   });
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,9 +131,28 @@ const SignUpDetails = () => {
         </div>
         <div>
           <Label htmlFor="pw">Password</Label>
-          <Input id="pw" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="mt-1" required />
+          <div className="relative mt-1">
+            <Input
+              id="pw"
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              className="pr-10"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           <p className="mt-1 text-xs text-muted-foreground">Min 8 chars with at least one letter and one number.</p>
         </div>
+
 
         {role === "professional" && (
           <div className="space-y-3 border-t pt-4">
@@ -162,8 +185,17 @@ const SignUpDetails = () => {
         <div className="flex items-start gap-2">
           <Checkbox id="terms" checked={form.terms} onCheckedChange={(v) => setForm({ ...form, terms: !!v })} />
           <Label htmlFor="terms" className="text-sm font-normal leading-snug">
-            I agree to the Terms of Use and Privacy Policy.
+            I agree to the{" "}
+            <Link to="/legal/terms" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-primary underline-offset-2 hover:underline">
+              Terms of Use
+            </Link>{" "}
+            and{" "}
+            <Link to="/legal/privacy" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-primary underline-offset-2 hover:underline">
+              Privacy Policy
+            </Link>
+            .
           </Label>
+
         </div>
 
         <Button type="submit" disabled={submitting} size="lg" className="w-full bg-primary text-primary-foreground">

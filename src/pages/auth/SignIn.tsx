@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import AuthShell from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, defaultDashboardForRoles } from "@/hooks/useAuth";
+
+const SUPABASE_AUTH_STORAGE_KEY = "sb-neamtpgdqbfuxotozkpd-auth-token";
+
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -15,6 +20,8 @@ const SignIn = () => {
   const { user, roles, loading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -29,6 +36,15 @@ const SignIn = () => {
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      if (!remember) {
+        try {
+          const token = localStorage.getItem(SUPABASE_AUTH_STORAGE_KEY);
+          if (token) {
+            sessionStorage.setItem(SUPABASE_AUTH_STORAGE_KEY, token);
+            localStorage.removeItem(SUPABASE_AUTH_STORAGE_KEY);
+          }
+        } catch { /* ignore */ }
+      }
       toast.success("Welcome back");
     } catch (err) {
       toast.error((err as Error).message || "Sign in failed");
@@ -48,8 +64,32 @@ const SignIn = () => {
         </div>
         <div>
           <Label htmlFor="si-pw">Password</Label>
-          <Input id="si-pw" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1" />
-          <Link to="/forgot-password" className="block mt-1 text-xs text-primary hover:underline">Forgot password?</Link>
+          <div className="relative mt-1">
+            <Input
+              id="si-pw"
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer">
+            <Checkbox checked={remember} onCheckedChange={(v) => setRemember(!!v)} />
+            Remember me
+          </label>
+          <Link to="/forgot-password" className="text-xs text-primary hover:underline">Forgot password?</Link>
         </div>
         <Button type="submit" disabled={submitting} size="lg" className="w-full bg-primary text-primary-foreground">
           {submitting ? "Signing in..." : "Sign In"}
@@ -63,3 +103,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
