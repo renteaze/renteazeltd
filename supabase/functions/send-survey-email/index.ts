@@ -311,8 +311,119 @@ async function sendForUser(
     .eq("id", userId);
   if (stampErr) console.error("Failed to set survey_email_sent_at", stampErr);
 
+  // Fan out admin notifications (in-app + email). Failures are logged but do not
+  // fail the user-facing send.
+  try {
+    await notifyAdminsOfSubmission(admin, profile as Record<string, unknown>, userId, brevoKey, pdfBase64, fileName);
+  } catch (e) {
+    console.error("notifyAdminsOfSubmission failed", e);
+  }
+
   return { sent: true, sent_at: sentAt, status: 200, recipient: email };
 }
+
+async function notifyAdminsOfSubmission(
+  admin: ReturnType<typeof createClient>,
+  profile: Record<string, unknown>,
+  userId: string,
+  brevoKey: string,
+  pdfBase64: string,
+  fileName: string,
+) {
+  // Find all admin user IDs
+  const { data: adminRoles, error: roleErr } = await admin
+    .from("user_roles")
+    .select("user_id")
+    .eq("role", "admin");
+  if (roleErr) { console.error("Admin lookup failed", roleErr); return; }
+  const adminIds = (adminRoles ?? []).map((r: { user_id: string }) => r.user_id);
+  if (adminIds.length === 0) return;
+
+  const submitterName =
+    (profile.full_name as string) ||
+    [profile.first_name, profile.last_name].filter(Boolean).join(" ").trim() ||
+    (profile.email as string) ||
+    "A user";
+  const submitterEmail = (profile.email as string) ?? "";
+  const submitterPhone = (profile.phone as string) ?? "—";
+  const contactMethod = (profile.preferred_contact_method as string) ?? "—";
+  const link = `/admin/users?survey=completed&focus=${userId}`;
+
+  // In-app notifications (service role bypasses RLS).
+  const notifRows = adminIds.map((aid) => ({
+    user_id: aid,
+    type: "survey_submitted",
+    title: "New survey submitted",
+    body: `${submitterName} just completed their survey.`,
+    link,
+  }));
+  const { error: notifErr } = await admin.from("notifications").insert(notifRows);
+  if (notifErr) console.error("notifications insert failed", notifErr);
+
+  // Fetch admin emails
+  const { data: adminProfiles, error: apErr } = await admin
+    .from("profiles")
+    .select("id,email,first_name")
+    .in("id", adminIds);
+  if (apErr) { console.error("Admin profiles lookup failed", apErr); return; }
+
+  const adminEmails = (adminProfiles ?? [])
+    .map((a: { email: string | null; first_name: string | null }) => ({
+      email: a.email,
+      name: a.first_name ?? "Admin",
+    }))
+    .filter((a) => !!a.email) as { email: string; name: string }[];
+  if (adminEmails.length === 0) return;
+
+  const html = `
+<!doctype html>
+<html><body style="margin:0;background:#f6f6f8;font-family:Arial,Helvetica,sans-serif;color:#1a1a1f;">
+  <div style="max-width:600px;margin:0 auto;background:#ffffff;">
+    <div style="background:#d4af1a;height:8px;"></div>
+    <div style="padding:24px 32px 8px;">
+      <div style="font-size:14px;font-weight:bold;color:#d4af1a;letter-spacing:1px;">RENTEAZE · ADMIN</div>
+    </div>
+    <div style="padding:8px 32px 32px;">
+      <h1 style="font-size:20px;margin:8px 0 16px;">New survey submitted</h1>
+      <p style="font-size:14px;line-height:1.6;color:#3a3a42;margin:0 0 16px;">
+        <strong>${submitterName}</strong> has just completed and submitted their Renteaze survey.
+      </p>
+      <table cellpadding="0" cellspacing="0" style="font-size:13px;color:#3a3a42;border-collapse:collapse;margin:0 0 20px;">
+        <tr><td style="padding:4px 12px 4px 0;color:#7a7a82;">Email</td><td style="padding:4px 0;">${submitterEmail || "—"}</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:#7a7a82;">Phone</td><td style="padding:4px 0;">${submitterPhone}</td></tr>
+        <tr><td style="padding:4px 12px 4px 0;color:#7a7a82;">Preferred contact</td><td style="padding:4px 0;">${contactMethod}</td></tr>
+      </table>
+      <p style="font-size:13px;line-height:1.6;color:#3a3a42;margin:0 0 8px;">
+        The submitter's full responses are attached as a PDF. Open the admin console to review and acknowledge.
+      </p>
+      <hr style="border:none;border-top:1px solid #e5e5ea;margin:24px 0;" />
+      <p style="font-size:11px;color:#7a7a82;line-height:1.5;margin:0;">
+        Automated admin notification · Renteaze&trade;
+      </p>
+    </div>
+  </div>
+</body></html>`.trim();
+
+  const brevoRes = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": brevoKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: BREVO_SENDER_NAME, email: BREVO_SENDER_EMAIL },
+      to: adminEmails,
+      subject: `New survey submitted — ${submitterName}`,
+      htmlContent: html,
+      attachment: [{ name: fileName, content: pdfBase64 }],
+    }),
+  });
+  if (!brevoRes.ok) {
+    console.error("Brevo admin notification failed", brevoRes.status, await brevoRes.text());
+  }
+}
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
