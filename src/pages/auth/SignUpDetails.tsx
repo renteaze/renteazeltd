@@ -131,9 +131,28 @@ const SignUpDetails = () => {
         </div>
         <div>
           <Label htmlFor="pw">Password</Label>
-          <Input id="pw" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="mt-1" required />
+          <div className="relative mt-1">
+            <Input
+              id="pw"
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              className="pr-10"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
+              tabIndex={-1}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
           <p className="mt-1 text-xs text-muted-foreground">Min 8 chars with at least one letter and one number.</p>
         </div>
+
 
         {role === "professional" && (
           <div className="space-y-3 border-t pt-4">
