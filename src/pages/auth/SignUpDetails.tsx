@@ -185,8 +185,17 @@ const SignUpDetails = () => {
         <div className="flex items-start gap-2">
           <Checkbox id="terms" checked={form.terms} onCheckedChange={(v) => setForm({ ...form, terms: !!v })} />
           <Label htmlFor="terms" className="text-sm font-normal leading-snug">
-            I agree to the Terms of Use and Privacy Policy.
+            I agree to the{" "}
+            <Link to="/legal/terms" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-primary underline-offset-2 hover:underline">
+              Terms of Use
+            </Link>{" "}
+            and{" "}
+            <Link to="/legal/privacy" target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-primary underline-offset-2 hover:underline">
+              Privacy Policy
+            </Link>
+            .
           </Label>
+
         </div>
 
         <Button type="submit" disabled={submitting} size="lg" className="w-full bg-primary text-primary-foreground">
