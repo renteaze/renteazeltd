@@ -42,6 +42,8 @@ const SignUpDetails = () => {
     profession: "", association: "", years: "", terms: false,
   });
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
