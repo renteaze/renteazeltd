@@ -1,29 +1,66 @@
-# Auth UX polish
+# Survey notifications + admin acknowledgement
 
-Three small frontend-only changes to the sign-up and sign-in screens.
+Three additions tied to the existing survey-submission flow.
 
-## 1. Hyperlink "Terms of Use" and "Privacy Policy"
-File: `src/pages/auth/SignUpDetails.tsx`
+## 1. Notify admins when a user submits the survey
 
-In the terms checkbox label, replace the plain text with `<Link>` elements:
-- "Terms of Use" → `/legal/terms` (route already exists via `src/pages/legal/Terms.tsx`)
-- "Privacy Policy" → `/legal/privacy` (route already exists via `src/pages/legal/Privacy.tsx`)
+Extend `supabase/functions/send-survey-email/index.ts` (already runs once per user, idempotent via `survey_email_sent_at`) to, in the same call:
 
-Links open in a new tab (`target="_blank"`, `rel="noopener noreferrer"`) so users don't lose form state. Styled with `text-primary underline-offset-2 hover:underline`. Click on the link won't toggle the checkbox (stopPropagation).
+- **In-app notifications** — insert one row into `notifications` for every user with the `admin` role:
+  - `type = "survey_submitted"`
+  - `title = "New survey submitted"`
+  - `body = "{Full name or email} just completed their survey."`
+  - `link = "/admin/users?survey=completed&focus={user_id}"`
+  - Uses service-role client (RLS bypassed; existing policy blocks user-side inserts and is preserved).
+- **Email to admins** — fetch the email of every admin (`user_roles.role = 'admin'` → `profiles.email`) and send one Brevo email per admin: subject "New survey submitted — {full name}", body summarising name, email, phone, preferred contact method, with a link to `/admin/users?survey=completed`. The submitted PDF is attached so admins have the full responses.
+- Failures here are caught and logged but don't fail the user-facing send.
 
-## 2. Password reveal toggle
-Files: `src/pages/auth/SignUpDetails.tsx`, `src/pages/auth/SignIn.tsx`
+No new edge function. `survey_email_sent_at` continues to gate both the user email and the admin fan-out, so retries are safe.
 
-Wrap the password `<Input>` in a relative container with a right-aligned button that toggles a local `showPassword` state between `type="password"` and `type="text"`. Uses `Eye` / `EyeOff` icons from `lucide-react`, with `aria-label="Show password" / "Hide password"`. Pure presentation, no logic change.
+## 2. Surface admin notifications on the admin dashboard
 
-## 3. "Remember me" on Sign In
-File: `src/pages/auth/SignIn.tsx`
+In `src/pages/portal/AdminDashboard.tsx`, add a "Recent activity" card under the stat tiles:
 
-Add a `Checkbox` + label "Remember me" on the same row as the "Forgot password?" link (checkbox left, link right).
+- Reads the latest 10 rows from `notifications` where `user_id = auth.uid()`, ordered by `created_at desc`.
+- Each row shows title, body, relative time, an unread dot when `is_read = false`, and a "View" link that navigates to `notification.link`. Clicking marks it read (`update is_read = true`).
+- A "Mark all as read" button.
+- Lightweight realtime: a Supabase channel subscribed to `INSERT` on `notifications` filtered by `user_id = auth.uid()` so new items appear without refresh.
 
-Behavior: Supabase JS persists sessions in `localStorage` by default (survives browser restarts). When **unchecked**, before calling `signInWithPassword` we move the persisted session to `sessionStorage` so it clears when the browser closes. Implementation: a small helper that, when remember is false, sets `supabase.auth.setSession` storage swap via re-initializing — simplest approach is to, after successful sign-in, if `!remember`, copy the auth token from `localStorage` to `sessionStorage` and remove it from `localStorage`. Default is checked (current behavior preserved).
+This uses the existing `notifications` table and existing RLS (users read/update their own rows).
+
+## 3. Admin acknowledgement action
+
+In `src/components/admin/UserDetailDrawer.tsx`, add a small action bar at the top of the drawer (visible only when `profile.survey_completed`):
+
+- Button: **"Send acknowledgement"** (one click, no dialog).
+- Disabled and replaced with "Acknowledged {date} by {admin name}" once `survey_acknowledged_at` is set.
+- Calls a new edge function `send-survey-acknowledgement` with `{ user_id }`.
+
+New edge function `supabase/functions/send-survey-acknowledgement/index.ts`:
+
+- Authenticated; verifies caller has `admin` role via `has_role(auth.uid(), 'admin')`.
+- Loads the target user's profile (name, email, preferred contact method).
+- Idempotency: aborts with a clear message if `survey_acknowledged_at` is already set.
+- Sends a Brevo email to the user: subject "We've received and reviewed your Renteaze survey", branded HTML body ("Thank you {first name}, our team has reviewed your responses. A Renteaze representative will be in touch shortly via your preferred contact method — {preferred_contact_method}.") plus the existing PropTech footer.
+- Inserts a `notifications` row for the user (`type = "survey_acknowledged"`, link to their portal dashboard).
+- Updates the profile: `survey_acknowledged_at = now()`, `survey_acknowledged_by = auth.uid()`.
+
+## 4. Schema migration
+
+Add to `profiles`:
+- `survey_acknowledged_at timestamptz` (nullable)
+- `survey_acknowledged_by uuid` (nullable, no FK to auth.users per project convention)
+
+No new tables, no RLS changes needed. Service-role writes from the edge functions; admins already have `update all profiles` policy for the read-back in the drawer.
 
 ## Out of scope
-- No backend / Supabase config changes.
-- No changes to the role picker, OTP, or survey screens.
-- No restyling beyond what these additions need.
+
+- No changes to the survey form itself or to the PDF generation.
+- No bulk "notify all admins of historical submissions" backfill (the existing `EmailBackfill` admin tool already covers backfilling user emails; admin notifications start from this change forward).
+- No new notification preferences UI — admins receive these regardless of their personal notification toggles, since they are operational alerts.
+
+## Technical details
+
+- Edge functions are CORS-enabled, use service-role for cross-user writes, and verify caller identity from the JWT (`createClient` with the user's `Authorization` header for the auth check, then a second service-role client for writes).
+- Brevo sender stays `admin@renteaze.com` / "Renteaze" (unchanged from current `send-survey-email`).
+- `notifications.link` uses in-app paths so the existing admin router handles them.
