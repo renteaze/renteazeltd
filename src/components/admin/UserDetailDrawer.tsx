@@ -83,6 +83,53 @@ const UserDetailDrawer = ({ userId, onClose }: Props) => {
               </SheetDescription>
             </SheetHeader>
 
+            {profile.survey_completed && (
+              <div className="mt-4 flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
+                {profile.survey_acknowledged_at ? (
+                  <>
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    <span className="text-sm text-muted-foreground">
+                      Acknowledged · {new Date(profile.survey_acknowledged_at).toLocaleString()}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <MailCheck className="h-4 w-4 text-primary" />
+                    <span className="text-sm text-muted-foreground flex-1">
+                      Confirm to the user that their survey has been reviewed.
+                    </span>
+                    <Button
+                      size="sm"
+                      disabled={acking}
+                      onClick={async () => {
+                        if (!userId) return;
+                        setAcking(true);
+                        try {
+                          const { data, error } = await supabase.functions.invoke(
+                            "send-survey-acknowledgement",
+                            { body: { user_id: userId } },
+                          );
+                          if (error) throw error;
+                          if (data?.ok === false) throw new Error(data.error || "Failed");
+                          toast.success("Acknowledgement sent");
+                          const { data: p } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+                          setProfile(p as FullProfile | null);
+                        } catch (e) {
+                          toast.error((e as Error).message || "Failed to send acknowledgement");
+                        } finally {
+                          setAcking(false);
+                        }
+                      }}
+                    >
+                      {acking ? "Sending..." : "Send acknowledgement"}
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
+
+
+
             <Tabs defaultValue="basic" className="mt-6">
               <TabsList className="grid grid-cols-4">
                 <TabsTrigger value="basic">Basic</TabsTrigger>
