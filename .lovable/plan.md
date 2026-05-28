@@ -1,37 +1,29 @@
-## Goal
-1. Correct the About page so Renteaze is described as a **registered trademark of Renteaze International Limited (registered 10 Mar 2021)** — not a subsidiary of Dapo Okunogbe & Partners.
-2. Add a clear "Renteaze is not a financial institution" disclosure in the footer, on every page, explaining that Renteaze is a PropTech platform and that financial services are delivered through licensed partners.
+# Auth UX polish
 
-## Changes
+Three small frontend-only changes to the sign-up and sign-in screens.
 
-### 1. `src/pages/About.tsx`
-- Rewrite the "Our Story" copy: remove the "subsidiary of Dapo Okunogbe & Partners" line. Replace with messaging that Renteaze is a brand/registered trademark of Renteaze International Limited (RC 1768094), with the trademark registered on 10 March 2021, building on 15+ years of Nigerian real estate experience from the founding team.
-- Update the hero sub-line under the H1 to reflect the same framing (no "subsidiary").
-- Update the Credentials list: replace any "subsidiary" wording with "Registered trademark of Renteaze International Limited — registered 10 March 2021".
-- Leave team bios largely intact, but soften the "Founded Dapo Okunogbe & Partners" bio so it reads as prior experience of the founder, not a parent company of Renteaze.
+## 1. Hyperlink "Terms of Use" and "Privacy Policy"
+File: `src/pages/auth/SignUpDetails.tsx`
 
-### 2. `src/pages/ForInvestors.tsx`
-- Remove the bullet "Subsidiary of Dapo Okunogbe & Partners (Est. 2009)" and replace with "Renteaze is a registered trademark of Renteaze International Limited (RC 1768094)".
+In the terms checkbox label, replace the plain text with `<Link>` elements:
+- "Terms of Use" → `/legal/terms` (route already exists via `src/pages/legal/Terms.tsx`)
+- "Privacy Policy" → `/legal/privacy` (route already exists via `src/pages/legal/Privacy.tsx`)
 
-### 3. `src/pages/Index.tsx`
-- Update the "Backed by 15+ Years of Real Estate" feature copy to drop the "Dapo Okunogbe & Partners" framing and instead reference the founding team's 15+ years of Lagos real estate expertise.
+Links open in a new tab (`target="_blank"`, `rel="noopener noreferrer"`) so users don't lose form state. Styled with `text-primary underline-offset-2 hover:underline`. Click on the link won't toggle the checkbox (stopPropagation).
 
-### 4. Footer disclaimer — `src/components/Footer.tsx`
-Add a new disclosure block above (or just under) the existing copyright row, shown on every page that uses the main Footer. Wording (final copy):
+## 2. Password reveal toggle
+Files: `src/pages/auth/SignUpDetails.tsx`, `src/pages/auth/SignIn.tsx`
 
-> **Renteaze is a PropTech company, not a bank, deposit-taking institution, securities dealer, or licensed financial-services provider.** We provide property-technology services. Rent financing, savings, payments, and investment products surfaced on the platform are offered and operated by our licensed partners (banks, microfinance institutions, fund managers, and SEC/CBN-regulated entities), who are solely responsible for those products. Nothing on this site is investment, legal, or tax advice. All investments carry risk, including possible loss of capital. See our [Disclaimer](/legal/disclaimer) and [Terms](/legal/terms).
+Wrap the password `<Input>` in a relative container with a right-aligned button that toggles a local `showPassword` state between `type="password"` and `type="text"`. Uses `Eye` / `EyeOff` icons from `lucide-react`, with `aria-label="Show password" / "Hide password"`. Pure presentation, no logic change.
 
-- Style: small muted text, full-width, with proper spacing — not buried in the copyright line.
-- Include the existing "Operated by Renteaze International Limited (RC 1768094)" line and add "Renteaze® is a registered trademark of Renteaze International Limited (registered 10 March 2021)".
+## 3. "Remember me" on Sign In
+File: `src/pages/auth/SignIn.tsx`
 
-### 5. Auxiliary footers
-For consistency, add a condensed version of the same not-a-financial-institution line to:
-- `src/components/auth/AuthShell.tsx`
-- `src/components/landing/LandingShell.tsx`
+Add a `Checkbox` + label "Remember me" on the same row as the "Forgot password?" link (checkbox left, link right).
 
-Just one sentence + link to `/legal/disclaimer`, so it appears on auth and landing pages too.
+Behavior: Supabase JS persists sessions in `localStorage` by default (survives browser restarts). When **unchecked**, before calling `signInWithPassword` we move the persisted session to `sessionStorage` so it clears when the browser closes. Implementation: a small helper that, when remember is false, sets `supabase.auth.setSession` storage swap via re-initializing — simplest approach is to, after successful sign-in, if `!remember`, copy the auth token from `localStorage` to `sessionStorage` and remove it from `localStorage`. Default is checked (current behavior preserved).
 
 ## Out of scope
-- No changes to legal pages (Privacy, Terms, Disclaimer, AML/KYC) — they already use the correct entity name.
-- No DB / backend changes.
-- No restyling beyond what's needed for the new disclosure block to read cleanly.
+- No backend / Supabase config changes.
+- No changes to the role picker, OTP, or survey screens.
+- No restyling beyond what these additions need.
