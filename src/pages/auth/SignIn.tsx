@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import AuthShell from "@/components/auth/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, defaultDashboardForRoles } from "@/hooks/useAuth";
+
+const SUPABASE_AUTH_STORAGE_KEY = "sb-neamtpgdqbfuxotozkpd-auth-token";
+
 
 const SignIn = () => {
   const navigate = useNavigate();
