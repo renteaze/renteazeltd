@@ -158,3 +158,14 @@ export function dashboardPathForRole(role: AppRole | undefined): string {
     default: return "/tenant/dashboard";
   }
 }
+
+/**
+ * Picks the default dashboard for a user with potentially multiple roles.
+ * Prefers non-admin roles so a tenant who is also an admin lands on their
+ * tenant dashboard from the public /signin page. Admin access is reached
+ * explicitly via /admin/login.
+ */
+export function defaultDashboardForRoles(roles: AppRole[]): string {
+  const primary = roles.find((r) => r !== "admin" && r !== "staff") ?? roles[0];
+  return dashboardPathForRole(primary);
+}

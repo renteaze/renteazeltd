@@ -355,6 +355,7 @@ export type Database = {
           survey_completed: boolean
           survey_completed_at: string | null
           survey_email_sent_at: string | null
+          survey_nudge_sent_at: string | null
           tenancy_duration: string | null
           tenancy_end_date: string | null
           tenancy_period: string | null
@@ -427,6 +428,7 @@ export type Database = {
           survey_completed?: boolean
           survey_completed_at?: string | null
           survey_email_sent_at?: string | null
+          survey_nudge_sent_at?: string | null
           tenancy_duration?: string | null
           tenancy_end_date?: string | null
           tenancy_period?: string | null
@@ -499,6 +501,7 @@ export type Database = {
           survey_completed?: boolean
           survey_completed_at?: string | null
           survey_email_sent_at?: string | null
+          survey_nudge_sent_at?: string | null
           tenancy_duration?: string | null
           tenancy_end_date?: string | null
           tenancy_period?: string | null

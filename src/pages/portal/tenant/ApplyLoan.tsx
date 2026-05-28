@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import PortalShell from "@/components/portal/PortalShell";
-import KycGate from "@/components/kyc/KycGate";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,7 +25,7 @@ const TENURE = ["Less than 6 months", "6 – 12 months", "1 – 2 years", "2 –
 
 const ApplyLoan = () => {
   const navigate = useNavigate();
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -47,15 +47,6 @@ const ApplyLoan = () => {
     return Math.round((amt * 1.6) / 12);
   }, [form.loan_amount_requested]);
 
-  if (profile && !profile.kyc_completed) {
-    return (
-      <PortalShell role="tenant">
-        <h1 className="text-2xl font-bold mb-1">Apply for Loan</h1>
-        <p className="text-sm text-muted-foreground mb-6">Verify your identity first to continue.</p>
-        <KycGate onComplete={() => window.location.reload()} />
-      </PortalShell>
-    );
-  }
 
   function next() {
     if (step === 2) {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, PiggyBank, CheckCircle2, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import PortalShell from "@/components/portal/PortalShell";
-import KycGate from "@/components/kyc/KycGate";
+import ComingSoonOverlay from "@/components/portal/ComingSoonOverlay";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,7 +37,7 @@ interface Txn {
 }
 
 const SaveForRent = () => {
-  const { user, profile } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [plan, setPlan] = useState<Plan | null>(null);
   const [txns, setTxns] = useState<Txn[]>([]);
@@ -126,21 +126,12 @@ const SaveForRent = () => {
     );
   }
 
-  // KYC gate for new enrolment
-  if (!plan && profile && !profile.kyc_completed) {
-    return (
-      <PortalShell role="tenant">
-        <h1 className="text-2xl font-bold mb-1">Save for Rent</h1>
-        <p className="text-sm text-muted-foreground mb-6">Verify your identity to start your savings plan.</p>
-        <KycGate />
-      </PortalShell>
-    );
-  }
 
   // Enrolment view
   if (!plan) {
     return (
       <PortalShell role="tenant">
+        <ComingSoonOverlay>
         <div className="max-w-2xl">
           <h1 className="text-2xl font-bold">Set up your Save for Rent plan</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -189,6 +180,7 @@ const SaveForRent = () => {
             </ol>
           </div>
         </div>
+        </ComingSoonOverlay>
       </PortalShell>
     );
   }
@@ -200,6 +192,7 @@ const SaveForRent = () => {
 
   return (
     <PortalShell role="tenant">
+      <ComingSoonOverlay>
       <div className="flex items-start justify-between flex-wrap gap-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold">Save for Rent</h1>
@@ -319,6 +312,7 @@ const SaveForRent = () => {
           </div>
         )}
       </div>
+      </ComingSoonOverlay>
     </PortalShell>
   );
 };

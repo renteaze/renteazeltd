@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Clock, FileText, Loader2, Upload, X, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import PortalShell from "@/components/portal/PortalShell";
+import ComingSoonOverlay from "@/components/portal/ComingSoonOverlay";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -90,6 +91,7 @@ const Documents = () => {
 
   return (
     <PortalShell role="tenant">
+      <ComingSoonOverlay>
       <h1 className="text-2xl font-bold">My Documents</h1>
       <p className="text-sm text-muted-foreground mb-6">Upload required documents so we can process your applications faster.</p>
 
@@ -188,6 +190,7 @@ const Documents = () => {
           )}
         </>
       )}
+      </ComingSoonOverlay>
     </PortalShell>
   );
 };

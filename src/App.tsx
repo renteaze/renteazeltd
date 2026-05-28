@@ -31,6 +31,7 @@ import SignUpDetails from "./pages/auth/SignUpDetails";
 import VerifyPhone from "./pages/auth/VerifyPhone";
 import Survey from "./pages/auth/Survey";
 import SignIn from "./pages/auth/SignIn";
+import AdminSignIn from "./pages/auth/AdminSignIn";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 
@@ -83,6 +84,8 @@ import AdminApplications from "./pages/portal/admin/Applications";
 import AdminProperties from "./pages/portal/admin/Properties";
 import AdminSettings from "./pages/portal/admin/Settings";
 import AdminProfile from "./pages/portal/admin/Profile";
+import AdminEmailBackfill from "./pages/portal/admin/EmailBackfill";
+
 import PortalSurvey from "./pages/portal/PortalSurvey";
 
 import Terms from "./pages/legal/Terms";
@@ -118,6 +121,7 @@ const App = () => (
 
           {/* Auth flow */}
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/admin/login" element={<AdminSignIn />} />
           <Route path="/signup" element={<SignUpRole />} />
           <Route path="/signup/details" element={<SignUpDetails />} />
           <Route path="/signup/verify-phone" element={<VerifyPhone />} />
@@ -182,6 +186,8 @@ const App = () => (
           <Route path="/admin/applications" element={<RequireAuth roles={["admin", "staff"]}><AdminApplications /></RequireAuth>} />
           <Route path="/admin/properties" element={<RequireAuth roles={["admin", "staff"]}><AdminProperties /></RequireAuth>} />
           <Route path="/admin/settings" element={<RequireAuth roles={["admin"]}><AdminSettings /></RequireAuth>} />
+          <Route path="/admin/email-backfill" element={<RequireAuth roles={["admin"]}><AdminEmailBackfill /></RequireAuth>} />
+          
 
           {/* Paid-ad landing pages */}
           <Route path="/lp/save-for-rent" element={<SaveForRentLP />} />

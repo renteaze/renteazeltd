@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2, Plus } from "lucide-react";
 import PortalShell from "@/components/portal/PortalShell";
+import ComingSoonOverlay from "@/components/portal/ComingSoonOverlay";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -56,6 +57,7 @@ const Loans = () => {
 
   return (
     <PortalShell role="tenant">
+      <ComingSoonOverlay>
       <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
         <div>
           <h1 className="text-2xl font-bold">My Loan Applications</h1>
@@ -114,6 +116,7 @@ const Loans = () => {
           </table>
         </div>
       )}
+      </ComingSoonOverlay>
     </PortalShell>
   );
 };

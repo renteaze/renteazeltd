@@ -69,7 +69,7 @@ const ForProfessionals = () => (
               </Button>
             </Link>
             <a href="#how-it-works">
-              <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary/20">
+              <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary/20">
                 See How It Works
               </Button>
             </a>
@@ -205,7 +205,7 @@ const ForProfessionals = () => (
             </Button>
           </Link>
           <Link to="/contact">
-            <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+            <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
               Talk to Partnerships
             </Button>
           </Link>

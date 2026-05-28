@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Loader2 } from "lucide-react";
 import PortalShell from "@/components/portal/PortalShell";
+import ComingSoonOverlay from "@/components/portal/ComingSoonOverlay";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { formatNGN, formatDate } from "@/lib/format";
@@ -47,6 +48,7 @@ const Statements = () => {
 
   return (
     <PortalShell role="tenant">
+      <ComingSoonOverlay>
       <h1 className="text-2xl font-bold">Statements</h1>
       <p className="text-sm text-muted-foreground mb-6">Your full transaction history.</p>
 
@@ -92,6 +94,7 @@ const Statements = () => {
           </table>
         </div>
       )}
+      </ComingSoonOverlay>
     </PortalShell>
   );
 };

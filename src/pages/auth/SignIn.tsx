@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth, dashboardPathForRole } from "@/hooks/useAuth";
+import { useAuth, defaultDashboardForRoles } from "@/hooks/useAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const SignIn = () => {
   useEffect(() => {
     if (loading || !user) return;
     if (redirect) { navigate(redirect, { replace: true }); return; }
-    navigate(dashboardPathForRole(roles[0]), { replace: true });
+    navigate(defaultDashboardForRoles(roles), { replace: true });
   }, [user, loading, roles, redirect, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {

@@ -114,7 +114,7 @@ const ForTenants = () => (
               </Button>
             </a>
             <Link to="/signup?role=tenant">
-              <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary/20">
+              <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary/20">
                 Create Account
               </Button>
             </Link>

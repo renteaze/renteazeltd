@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Settings as SettingsIcon, LogOut, Bell, Menu, X,
   PiggyBank, CreditCard, FileText, BarChart2, Home, Calendar, MessageSquare,
   Building2, Users, Banknote, Wrench, TrendingUp, Briefcase, Share2,
-  DollarSign, BookOpen, Shield, ClipboardList,
+  DollarSign, BookOpen, Shield, ClipboardList, Mail,
 } from "lucide-react";
 import { useAuth, type AppRole } from "@/hooks/useAuth";
 import UserMenu from "@/components/UserMenu";
@@ -57,6 +57,8 @@ const NAV_BY_ROLE: Record<AppRole, NavItem[]> = {
     { label: "Users", path: "/admin/users", icon: Users },
     { label: "Applications", path: "/admin/applications", icon: FileText },
     { label: "Properties", path: "/admin/properties", icon: Building2 },
+    { label: "Email Backfill", path: "/admin/email-backfill", icon: Mail },
+    
     { label: "System", path: "/admin/settings", icon: Shield },
   ],
 };
