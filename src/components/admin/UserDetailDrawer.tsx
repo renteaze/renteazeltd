@@ -22,6 +22,8 @@ type FullProfile = Record<string, unknown> & {
   phone: string | null;
   survey_completed: boolean;
   survey_completed_at: string | null;
+  survey_acknowledged_at?: string | null;
+  survey_acknowledged_by?: string | null;
   created_at: string;
 };
 
@@ -30,6 +32,8 @@ const UserDetailDrawer = ({ userId, onClose }: Props) => {
   const [roles, setRoles] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [acking, setAcking] = useState(false);
+
 
   useEffect(() => {
     if (!userId) return;
