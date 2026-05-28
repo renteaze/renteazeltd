@@ -352,6 +352,8 @@ export type Database = {
           sought_rent_help_before: boolean | null
           state_of_residence: string | null
           status: Database["public"]["Enums"]["account_status"]
+          survey_acknowledged_at: string | null
+          survey_acknowledged_by: string | null
           survey_completed: boolean
           survey_completed_at: string | null
           survey_email_sent_at: string | null
@@ -425,6 +427,8 @@ export type Database = {
           sought_rent_help_before?: boolean | null
           state_of_residence?: string | null
           status?: Database["public"]["Enums"]["account_status"]
+          survey_acknowledged_at?: string | null
+          survey_acknowledged_by?: string | null
           survey_completed?: boolean
           survey_completed_at?: string | null
           survey_email_sent_at?: string | null
@@ -498,6 +502,8 @@ export type Database = {
           sought_rent_help_before?: boolean | null
           state_of_residence?: string | null
           status?: Database["public"]["Enums"]["account_status"]
+          survey_acknowledged_at?: string | null
+          survey_acknowledged_by?: string | null
           survey_completed?: boolean
           survey_completed_at?: string | null
           survey_email_sent_at?: string | null
