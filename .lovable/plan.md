@@ -1,24 +1,14 @@
-## Move and upgrade the "In good company" strip
+## Replace icon-only logos with full wordmark versions
 
-### 1. Reposition
-Move the "In good company" `<section>` (Index.tsx lines 227–241) directly under the hero (after line 91), removing it from its current position between Insights and Testimonials.
+The current Stanbic IBTC, MyCover.AI, and Zedcrest logos came from logo.dev, which returned favicon-style icon marks without the brand name. Swap them for full horizontal logos that include the wordmark.
 
-### 2. Add logo assets
-Copy the 8 uploaded logos into `src/assets/logos/`:
-- HCC Harvesthouse, Cadlinks Systems, DOP Real Estate, FirstBank, GTBank, Hermon Barristers & Solicitors, Oduak Projects, Bujeti
-
-Fetch the official logos for the 3 remaining partners (Stanbic IBTC, MyCover.AI, Zed Crest) from the web and save into `src/assets/logos/` as well.
-
-### 3. New `PartnerLogosCarousel` component
-Create `src/components/PartnerLogosCarousel.tsx` using the existing `embla-carousel-react` (already in `ui/carousel.tsx`) with:
-- Auto-scrolling continuous marquee (embla-carousel-autoplay or a lightweight CSS marquee fallback)
-- Responsive slides: 2 on mobile, 3 sm, 4 md, 5 lg
-- Each slide renders an `<img>` of the logo with consistent height (~h-10 md:h-12), `object-contain`, grayscale on idle + color on hover, proper `alt`
-- Loop enabled, drag-free, no visible nav buttons
-
-### 4. Wire into Index
-Replace the inline `flex flex-wrap` logo list with `<PartnerLogosCarousel />` in the relocated section. Keep the "In good company" eyebrow label and section chrome (`py-10 border-y bg-background`).
+### Approach
+1. Source full-wordmark logos for each:
+   - **Stanbic IBTC** — fetch from Wikipedia's full SVG (`Stanbic_IBTC_Bank_Logo.svg`) at a valid thumb size, or from the official `stanbicibtcbank.com` site.
+   - **MyCover.AI** — extract the inline SVG wordmark from `mycover.ai` header, save as `.svg`.
+   - **Zedcrest** — extract the inline SVG wordmark from `zedcrest.com` header, save as `.svg`.
+2. Replace the three files in `src/assets/logos/` (`stanbic.png`, `mycover.png`, `zedcrest.png`) — keeping the same filenames so no import changes are needed. Use `.svg` where extracted as SVG and update the import extension only if needed.
+3. Visually verify each replacement renders the full name + mark, not just the icon, by viewing the saved files.
 
 ### Out of scope
-- No changes to LpTemplate's trust strip (separate component)
-- No new dependencies beyond optionally `embla-carousel-autoplay` (already-compatible plugin)
+- No layout or carousel changes — the 8 uploaded logos already display correctly.
