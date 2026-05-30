@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import UpcomingEvents from "@/components/UpcomingEvents";
+import PartnerLogosCarousel from "@/components/PartnerLogosCarousel";
 import { featuredProperties } from "@/data/properties";
 import { blogPosts } from "@/data/blog";
 import { Bed, Bath, Maximize, Calendar, Clock } from "lucide-react";
@@ -87,6 +88,16 @@ const Index = () => (
             </Link>
           ))}
         </div>
+      </div>
+    </section>
+
+    {/* Partner Logos Strip */}
+    <section className="py-10 border-y bg-background">
+      <div className="container mx-auto px-4 lg:px-8">
+        <p className="text-center text-xs uppercase tracking-wider text-muted-foreground mb-5">
+          In good company
+        </p>
+        <PartnerLogosCarousel />
       </div>
     </section>
 
@@ -224,21 +235,6 @@ const Index = () => (
       </div>
     </section>
 
-    {/* Partner Logos Strip */}
-    <section className="py-10 border-y bg-background">
-      <div className="container mx-auto px-4 lg:px-8">
-        <p className="text-center text-xs uppercase tracking-wider text-muted-foreground mb-5">
-          In good company
-        </p>
-        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
-          {["GTBank", "Stanbic IBTC", "MyCover.AI", "Bujeti", "Zed Crest"].map((name) => (
-            <span key={name} className="text-base md:text-lg font-semibold text-muted-foreground/70">
-              {name}
-            </span>
-          ))}
-        </div>
-      </div>
-    </section>
 
     <section className="py-16 md:py-20">
       <div className="container mx-auto px-4 lg:px-8">
