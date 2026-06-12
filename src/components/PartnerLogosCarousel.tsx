@@ -13,6 +13,13 @@ import cadlinks from "@/assets/logos/cadlinks.png";
 import dop from "@/assets/logos/dop.png";
 import hermon from "@/assets/logos/hermon.png";
 import oduak from "@/assets/logos/oduak.png";
+import dopPartners from "@/assets/logos/dop-partners.jpg.asset.json";
+import disciples from "@/assets/logos/disciples-in-business.jpg.asset.json";
+import epitomConcepts from "@/assets/logos/epitom-concepts.jpg.asset.json";
+import epitomInventory from "@/assets/logos/epitom-inventory.jpg.asset.json";
+import facmance from "@/assets/logos/facmance.jpg.asset.json";
+import oakbridge from "@/assets/logos/oakbridge.jpg.asset.json";
+import skywarder from "@/assets/logos/skywarder.jpg.asset.json";
 
 const partners = [
   { name: "GTBank", src: gtbank },
@@ -26,6 +33,13 @@ const partners = [
   { name: "DOP Real Estate Consulting Firm", src: dop },
   { name: "Hermon Barristers & Solicitors", src: hermon },
   { name: "Oduak Projects Ltd", src: oduak },
+  { name: "Dapo Okunogbe & Partners", src: dopPartners.url },
+  { name: "Disciples in Business UK Ltd", src: disciples.url },
+  { name: "Epitom Concepts UK Ltd", src: epitomConcepts.url },
+  { name: "Epitom Inventory", src: epitomInventory.url },
+  { name: "FacMance", src: facmance.url },
+  { name: "Oakbridge Investment Holdings", src: oakbridge.url },
+  { name: "Skywarder Limited", src: skywarder.url },
 ];
 
 const PartnerLogosCarousel = () => {
