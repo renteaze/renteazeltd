@@ -1,14 +1,19 @@
-## Replace icon-only logos with full wordmark versions
+## Add new partner logos to "In Good Company" carousel
 
-The current Stanbic IBTC, MyCover.AI, and Zedcrest logos came from logo.dev, which returned favicon-style icon marks without the brand name. Swap them for full horizontal logos that include the wordmark.
+Upload the 7 attached logos as Lovable Assets and add them to the `PartnerLogosCarousel` partners list.
 
-### Approach
-1. Source full-wordmark logos for each:
-   - **Stanbic IBTC** — fetch from Wikipedia's full SVG (`Stanbic_IBTC_Bank_Logo.svg`) at a valid thumb size, or from the official `stanbicibtcbank.com` site.
-   - **MyCover.AI** — extract the inline SVG wordmark from `mycover.ai` header, save as `.svg`.
-   - **Zedcrest** — extract the inline SVG wordmark from `zedcrest.com` header, save as `.svg`.
-2. Replace the three files in `src/assets/logos/` (`stanbic.png`, `mycover.png`, `zedcrest.png`) — keeping the same filenames so no import changes are needed. Use `.svg` where extracted as SVG and update the import extension only if needed.
-3. Visually verify each replacement renders the full name + mark, not just the icon, by viewing the saved files.
+### Steps
+1. Upload each uploaded image via `lovable-assets create` from `/mnt/user-uploads/`, writing `.asset.json` pointers to `src/assets/logos/`:
+   - `dop-partners.jpg.asset.json` — D.O.P (Dapo Okunogbe & Partners)
+   - `disciples-in-business.jpg.asset.json` — Disciples in Business UK Ltd
+   - `epitom-concepts.jpg.asset.json` — Epitom Concepts UK Ltd
+   - `epitom-inventory.jpg.asset.json` — Epitom Inventory
+   - `facmance.jpg.asset.json` — FacMance
+   - `oakbridge.jpg.asset.json` — Oakbridge Investment Holdings
+   - `skywarder.jpg.asset.json` — Skywarder Limited
+2. In `src/components/PartnerLogosCarousel.tsx`, import the 7 new asset pointers and append them to the `partners` array with proper names.
+   - Note: existing `dop.png` is a different "DOP Real Estate Consulting Firm" — keep it; the new D.O.P (Dapo Okunogbe & Partners) is a separate entry.
 
 ### Out of scope
-- No layout or carousel changes — the 8 uploaded logos already display correctly.
+- No layout/carousel behavior changes.
+- No changes to existing logos.
