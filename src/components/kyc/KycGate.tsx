@@ -41,13 +41,19 @@ const KycGate = ({ onComplete, onSkip }: KycGateProps) => {
           dob: form.dob,
         },
       });
-      if (error || !data?.verified) {
+      if (error || (!data?.verified && data?.status !== "pending")) {
         toast.error(data?.error || "NIN verification failed", {
           description: "Please check your details and try again.",
         });
         return;
       }
-      toast.success("Identity verified");
+      if (data?.status === "pending") {
+        toast.success("Details submitted for review", {
+          description: data?.message || "We'll notify you once verification is complete.",
+        });
+      } else {
+        toast.success("Identity verified");
+      }
       await refreshProfile();
       onComplete?.();
     } catch (err) {
