@@ -1,7 +1,18 @@
 // verify-nin edge function
-// Validates the user's NIN (DEV STUB: 11-digit check) and, on success,
-// performs the privileged profile update (kyc_status, nin_verified, etc.)
-// using the service-role client. This keeps users from self-approving KYC.
+//
+// Validates the user's NIN/BVN submission and stores the supplied details on
+// their profile. Auto-approval of KYC is GATED behind explicit configuration
+// so that no user can be marked as `nin_verified` / `kyc_completed` without
+// either (a) a real third-party verification API or (b) an admin manually
+// flipping the feature flag in Supabase secrets.
+//
+// Behaviour:
+//   - Always: persist nin/bvn/account/bank/dob to the profile and set
+//     kyc_status = 'pending' so an admin can review.
+//   - If KYC_AUTO_APPROVE_ENABLED === 'true' AND a real provider is wired in
+//     (TODO: Prembly / Dojah / Smile Identity): mark verified.
+//
+// This prevents the previous bypass where any 11-digit NIN granted full KYC.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -29,6 +40,7 @@ Deno.serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const AUTO_APPROVE = Deno.env.get("KYC_AUTO_APPROVE_ENABLED") === "true";
 
     const userClient = createClient(SUPABASE_URL, ANON_KEY, {
       global: { headers: { Authorization: `Bearer ${token}` } },
@@ -53,9 +65,12 @@ Deno.serve(async (req) => {
     if (!bank) return json({ verified: false, error: "Bank is required" });
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) return json({ verified: false, error: "Invalid date of birth" });
 
-    // TODO: integrate Prembly / Dojah NIN verification API. For MVP we accept
-    // a well-formed NIN as verified.
-    const verified = true;
+    // ---- Real identity verification ----
+    // TODO: integrate Prembly / Dojah / Smile Identity here. Until then, the
+    // submission is queued for manual admin review and is NEVER auto-approved
+    // from format alone — even if the feature flag is enabled.
+    const providerVerified = false; // flip to true only when a real provider responds OK
+    const shouldAutoApprove = AUTO_APPROVE && providerVerified;
 
     // ---- Privileged update via service role ----
     const admin = createClient(SUPABASE_URL, SERVICE_KEY);
@@ -67,15 +82,23 @@ Deno.serve(async (req) => {
         bank_account_number: account,
         bank_name: bank,
         dob,
-        nin_verified: verified,
-        kyc_completed: verified,
-        kyc_status: verified ? "verified" : "pending",
+        nin_verified: shouldAutoApprove,
+        kyc_completed: shouldAutoApprove,
+        kyc_status: shouldAutoApprove ? "verified" : "pending",
       })
       .eq("id", userId);
 
     if (upErr) return json({ verified: false, error: "Profile update failed" }, 500);
 
-    return json({ verified, name: "Verified User" });
+    if (shouldAutoApprove) {
+      return json({ verified: true, status: "verified" });
+    }
+    return json({
+      verified: false,
+      status: "pending",
+      message:
+        "Your identity details have been submitted and are awaiting review. You'll be notified once verification is complete.",
+    });
   } catch (e) {
     return json({ verified: false, error: (e as Error).message }, 500);
   }
