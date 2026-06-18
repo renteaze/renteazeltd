@@ -28,6 +28,8 @@ import PartnerLP from "./pages/landing/PartnerLP";
 
 import SignUpRole from "./pages/auth/SignUpRole";
 import SignUpDetails from "./pages/auth/SignUpDetails";
+import CheckEmail from "./pages/auth/CheckEmail";
+
 import VerifyPhone from "./pages/auth/VerifyPhone";
 import Survey from "./pages/auth/Survey";
 import SignIn from "./pages/auth/SignIn";
@@ -125,6 +127,7 @@ const App = () => (
           <Route path="/signup" element={<SignUpRole />} />
           <Route path="/signup/details" element={<SignUpDetails />} />
           <Route path="/signup/verify-phone" element={<VerifyPhone />} />
+          <Route path="/signup/check-email" element={<CheckEmail />} />
           <Route path="/signup/survey" element={<RequireAuth><Survey /></RequireAuth>} />
           <Route path="/survey" element={<RequireAuth><PortalSurvey /></RequireAuth>} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

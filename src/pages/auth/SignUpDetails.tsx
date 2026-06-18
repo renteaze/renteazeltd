@@ -60,7 +60,7 @@ const SignUpDetails = () => {
         email: form.email,
         password: form.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/signin`,
+          emailRedirectTo: `${window.location.origin}/signup/survey`,
           data: {
             first_name: form.firstName,
             last_name: form.lastName,
@@ -87,18 +87,26 @@ const SignUpDetails = () => {
         }).eq("id", userId);
       }
 
-      // Mock phase: skip phone/email OTP and go straight to the in-platform survey.
-      // (VerifyPhone screen + verify-otp edge fn stay in place for when SMS goes live.)
       sessionStorage.setItem("rz_email", form.email);
       if (userId) sessionStorage.setItem("rz_user", userId);
-      toast.success("Account created — let's personalise your experience");
-      navigate("/signup/survey");
+
+      // If Supabase Auth has "Confirm email" enabled, signUp returns no session
+      // until the user clicks the confirmation link in their inbox. Send them to
+      // the "check your email" screen rather than the authenticated survey.
+      if (!data.session) {
+        toast.success("Account created — check your email to confirm");
+        navigate(`/signup/check-email?email=${encodeURIComponent(form.email)}`);
+      } else {
+        toast.success("Account created — let's personalise your experience");
+        navigate("/signup/survey");
+      }
     } catch (err) {
       toast.error((err as Error).message || "Sign up failed");
     } finally {
       setSubmitting(false);
     }
   };
+
 
   return (
     <AuthShell step={{ current: 2, total: 2 }}>
