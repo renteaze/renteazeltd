@@ -18,8 +18,6 @@ import disciples from "@/assets/logos/disciples-in-business.jpg.asset.json";
 import epitomConcepts from "@/assets/logos/epitom-concepts.jpg.asset.json";
 import epitomInventory from "@/assets/logos/epitom-inventory.jpg.asset.json";
 import facmance from "@/assets/logos/facmance.jpg.asset.json";
-import oakbridge from "@/assets/logos/oakbridge.jpg.asset.json";
-import skywarder from "@/assets/logos/skywarder.jpg.asset.json";
 
 const partners = [
   { name: "GTBank", src: gtbank },
@@ -38,8 +36,6 @@ const partners = [
   { name: "Epitom Concepts UK Ltd", src: epitomConcepts.url },
   { name: "Epitom Inventory", src: epitomInventory.url },
   { name: "FacMance", src: facmance.url },
-  { name: "Oakbridge Investment Holdings", src: oakbridge.url },
-  { name: "Skywarder Limited", src: skywarder.url },
 ];
 
 const PartnerLogosCarousel = () => {
