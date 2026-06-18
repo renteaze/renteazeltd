@@ -1,1 +1,4 @@
 project_id = "neamtpgdqbfuxotozkpd"
+
+[functions.setup-partner-logos]
+verify_jwt = false

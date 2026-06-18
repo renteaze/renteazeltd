@@ -2,40 +2,30 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useRef } from "react";
 
-import gtbank from "@/assets/logos/gtbank.png";
-import firstbank from "@/assets/logos/firstbank.png";
-import stanbic from "@/assets/logos/stanbic.png";
-import mycover from "@/assets/logos/mycover.png";
-import bujeti from "@/assets/logos/bujeti.jpg";
-import zedcrest from "@/assets/logos/zedcrest.png";
-import hcc from "@/assets/logos/hcc.jpg";
-import cadlinks from "@/assets/logos/cadlinks.png";
-import dop from "@/assets/logos/dop.png";
-import hermon from "@/assets/logos/hermon.png";
-import oduak from "@/assets/logos/oduak.png";
-import dopPartners from "@/assets/logos/dop-partners.jpg.asset.json";
-import disciples from "@/assets/logos/disciples-in-business.jpg.asset.json";
-import epitomConcepts from "@/assets/logos/epitom-concepts.jpg.asset.json";
-import epitomInventory from "@/assets/logos/epitom-inventory.jpg.asset.json";
-import facmance from "@/assets/logos/facmance.jpg.asset.json";
+// All partner logos are hosted in the Supabase Storage bucket `partner-logos`
+// so they survive Lovable project transfers. To add/replace logos, upload to
+// that bucket and add an entry below.
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
+const logoUrl = (file: string) =>
+  `${SUPABASE_URL}/storage/v1/object/public/partner-logos/${file}`;
 
 const partners = [
-  { name: "GTBank", src: gtbank },
-  { name: "FirstBank", src: firstbank },
-  { name: "Stanbic IBTC", src: stanbic },
-  { name: "MyCover.AI", src: mycover },
-  { name: "Bujeti", src: bujeti },
-  { name: "Zedcrest", src: zedcrest },
-  { name: "Harvest House Christian Center", src: hcc },
-  { name: "Cadlinks Systems", src: cadlinks },
-  { name: "DOP Real Estate Consulting Firm", src: dop },
-  { name: "Hermon Barristers & Solicitors", src: hermon },
-  { name: "Oduak Projects Ltd", src: oduak },
-  { name: "Dapo Okunogbe & Partners", src: dopPartners.url },
-  { name: "Disciples in Business UK Ltd", src: disciples.url },
-  { name: "Epitom Concepts UK Ltd", src: epitomConcepts.url },
-  { name: "Epitom Inventory", src: epitomInventory.url },
-  { name: "FacMance", src: facmance.url },
+  { name: "GTBank", file: "gtbank.png" },
+  { name: "FirstBank", file: "firstbank.png" },
+  { name: "Stanbic IBTC", file: "stanbic.png" },
+  { name: "MyCover.AI", file: "mycover.png" },
+  { name: "Bujeti", file: "bujeti.jpg" },
+  { name: "Zedcrest", file: "zedcrest.png" },
+  { name: "Harvest House Christian Center", file: "hcc.jpg" },
+  { name: "Cadlinks Systems", file: "cadlinks.png" },
+  { name: "DOP Real Estate Consulting Firm", file: "dop.png" },
+  { name: "Hermon Barristers & Solicitors", file: "hermon.png" },
+  { name: "Oduak Projects Ltd", file: "oduak.png" },
+  { name: "Dapo Okunogbe & Partners", file: "dop-partners.jpg" },
+  { name: "Disciples in Business UK Ltd", file: "disciples-in-business.jpg" },
+  { name: "Epitom Concepts UK Ltd", file: "epitom-concepts.jpg" },
+  { name: "Epitom Inventory", file: "epitom-inventory.jpg" },
+  { name: "FacMance", file: "facmance.jpg" },
 ];
 
 const PartnerLogosCarousel = () => {
@@ -57,7 +47,7 @@ const PartnerLogosCarousel = () => {
           >
             <div className="flex items-center justify-center h-16 md:h-20">
               <img
-                src={p.src}
+                src={logoUrl(p.file)}
                 alt={`${p.name} logo`}
                 loading="lazy"
                 className="max-h-12 md:max-h-14 w-auto object-contain opacity-80 grayscale hover:grayscale-0 hover:opacity-100 transition"
