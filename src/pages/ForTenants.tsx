@@ -4,7 +4,6 @@ import { Home, PiggyBank, Banknote, Plus, ArrowUpCircle, Building, Key, Calendar
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import LeadCaptureForm from "@/components/LeadCaptureForm";
@@ -27,10 +26,11 @@ const testimonials = [
 
 const RentCalculator = () => {
   const [annualRent, setAnnualRent] = useState(1200000);
-  const [months, setMonths] = useState(10);
 
-  const monthly = annualRent / months;
-  const biWeekly = annualRent / (months * 2);
+  const monthly = annualRent * 0.1;
+  const biWeekly = monthly / 2;
+  const byMonth10 = monthly * 10;
+  const byMonth12 = monthly * 12;
 
   return (
     <Card className="border-2 border-primary">
@@ -54,33 +54,28 @@ const RentCalculator = () => {
               ₦{annualRent.toLocaleString()} per year
             </p>
           </div>
-          <div>
-            <label className="text-sm font-medium mb-2 block">Savings Period: {months} months</label>
-            <Slider
-              value={[months]}
-              onValueChange={(v) => setMonths(v[0])}
-              min={3}
-              max={12}
-              step={1}
-            />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>3 months</span><span>12 months</span>
-            </div>
-          </div>
           <div className="bg-light-blue rounded-lg p-5 space-y-3">
             <h4 className="font-semibold text-primary">Your Savings Breakdown</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-2xl font-bold text-primary">₦{Math.round(monthly).toLocaleString()}</p>
-                <p className="text-xs text-muted-foreground">Monthly savings</p>
+                <p className="text-xs text-muted-foreground">Monthly savings (10% of annual rent)</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-accent">₦{Math.round(biWeekly).toLocaleString()}</p>
                 <p className="text-xs text-muted-foreground">Bi-weekly savings</p>
               </div>
+              <div>
+                <p className="text-2xl font-bold text-primary">₦{Math.round(byMonth10).toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">By month 10 — we pay your landlord in full</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-accent">₦{Math.round(byMonth12).toLocaleString()}</p>
+                <p className="text-xs text-muted-foreground">By month 12 — 120% buffer for next year</p>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Save ₦{Math.round(monthly).toLocaleString()}/month for {months} months to cover your ₦{annualRent.toLocaleString()} annual rent.
+              Save ₦{Math.round(monthly).toLocaleString()} each month. Your funds are invested, so by month 10 we can pay your landlord your full ₦{annualRent.toLocaleString()} rent — and you keep building a head-start for next year.
             </p>
             <Link to="/signup?role=tenant&product=save-for-rent">
               <Button className="w-full mt-2 bg-accent text-accent-foreground hover:opacity-90 gap-2">
@@ -153,9 +148,9 @@ const ForTenants = () => (
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
           <div>
-            <SectionHeading title="Save for Rent Calculator" subtitle="See how easy it is to break your annual rent into small monthly savings." centered={false} />
+            <SectionHeading title="Save for Rent Calculator" subtitle="Save 10% of your rent each month. We invest it and pay your landlord by month 10." centered={false} />
             <ul className="space-y-3 mt-6">
-              {["No interest charges — just disciplined savings", "Automated reminders & tracking", "Funds locked until rent is due", "Top up anytime with Add-On Funds"].map((t) => (
+              {["Fixed 10%-of-rent monthly contribution", "Funds are invested while you save", "Landlord paid in full by month 10", "Months 11–12 build a buffer for next year", "Top up anytime with Add-On Funds"].map((t) => (
                 <li key={t} className="flex items-center gap-2 text-sm text-muted-foreground">
                   <ArrowRight className="h-4 w-4 text-accent shrink-0" />
                   {t}
