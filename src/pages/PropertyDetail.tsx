@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,
-} from "@/components/ui/carousel";
 import Layout from "@/components/PortalAwareLayout";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { properties } from "@/data/properties";
 import { waLink } from "@/config/contact";
 
