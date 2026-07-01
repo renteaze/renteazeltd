@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Layout from "@/components/PortalAwareLayout";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { properties } from "@/data/properties";
 
 const Properties = () => {
@@ -77,7 +78,7 @@ const Properties = () => {
               {filtered.map((p) => (
                 <Link key={p.id} to={`/properties/${p.id}`} className="group">
                   <Card className="cursor-pointer hover:shadow-lg transition-shadow overflow-hidden h-full">
-                    <img src={p.images[0]} alt={p.title} className="w-full h-48 object-cover group-hover:scale-[1.02] transition-transform" loading="lazy" />
+                    <PropertyImagePlaceholder className="w-full h-48" />
                     <CardContent className="p-5">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs font-semibold px-2 py-1 rounded bg-primary/10 text-primary">{p.type}</span>

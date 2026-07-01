@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import PortalShell from "@/components/portal/PortalShell";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { formatNGN } from "@/lib/format";
@@ -178,18 +179,8 @@ const LandlordProperties = () => {
                 className="cursor-pointer hover:shadow-lg transition-shadow"
                 onClick={() => navigate(`/landlord/properties/${property.id}`)}
               >
-                <div className="aspect-video bg-muted rounded-t-lg overflow-hidden">
-                  {property.images && property.images.length > 0 ? (
-                    <img
-                      src={property.images[0]}
-                      alt={property.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Building2 className="h-8 w-8 text-muted-foreground" />
-                    </div>
-                  )}
+                <div className="aspect-video rounded-t-lg overflow-hidden">
+                  <PropertyImagePlaceholder className="w-full h-full" />
                 </div>
 
                 <CardHeader>

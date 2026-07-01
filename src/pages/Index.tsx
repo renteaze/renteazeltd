@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import PartnerLogosCarousel from "@/components/PartnerLogosCarousel";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { featuredProperties } from "@/data/properties";
 import { blogPosts } from "@/data/blog";
 import { Bed, Bath, Maximize, Calendar, Clock } from "lucide-react";
@@ -176,7 +177,7 @@ const Index = () => (
           {featuredProperties.map((p) => (
             <Link key={p.id} to={`/properties/${p.id}`} className="group">
               <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
-                <img src={p.images[0]} alt={p.title} className="w-full h-48 object-cover group-hover:scale-[1.02] transition-transform" loading="lazy" />
+                <PropertyImagePlaceholder className="w-full h-48" />
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-semibold px-2 py-1 rounded bg-primary/10 text-primary">{p.type}</span>

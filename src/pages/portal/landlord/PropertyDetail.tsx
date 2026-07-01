@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PortalShell from "@/components/portal/PortalShell";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { formatNGN } from "@/lib/format";
@@ -249,18 +250,8 @@ const LandlordPropertyDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Image */}
           <div className="lg:col-span-2">
-            <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-              {property.images && property.images.length > 0 ? (
-                <img
-                  src={property.images[0]}
-                  alt={property.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <Building2 className="h-16 w-16 text-muted-foreground" />
-                </div>
-              )}
+            <div className="aspect-video rounded-lg overflow-hidden">
+              <PropertyImagePlaceholder className="w-full h-full" />
             </div>
           </div>
 

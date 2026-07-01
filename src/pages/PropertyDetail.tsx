@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious,
-} from "@/components/ui/carousel";
 import Layout from "@/components/PortalAwareLayout";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { properties } from "@/data/properties";
 import { waLink } from "@/config/contact";
 
@@ -46,21 +44,9 @@ const PropertyDetail = () => {
 
       <section className="py-8">
         <div className="container mx-auto px-4 lg:px-8">
-          <Carousel className="max-w-5xl mx-auto">
-            <CarouselContent>
-              {property.images.map((img, i) => (
-                <CarouselItem key={i}>
-                  <img src={img} alt={`${property.title} – view ${i + 1}`} className="w-full h-[300px] md:h-[480px] object-cover rounded-xl" />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {property.images.length > 1 && (
-              <>
-                <CarouselPrevious className="left-2 md:-left-4" />
-                <CarouselNext className="right-2 md:-right-4" />
-              </>
-            )}
-          </Carousel>
+          <div className="max-w-5xl mx-auto">
+            <PropertyImagePlaceholder className="w-full h-[300px] md:h-[480px] rounded-xl" />
+          </div>
         </div>
       </section>
 
