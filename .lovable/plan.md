@@ -1,42 +1,40 @@
-# Investigate Missing Signup Confirmation Email
+## Goal
+Hide all public-facing property photos behind a consistent "Images Unavailable" placeholder, while keeping upload functionality intact in the Landlord and Admin forms.
 
-A user signed up but never received the confirmation email. Before changing anything, I need to identify *why* — there are several possible causes and the fix depends on which one applies.
+## 1. New reusable component
+Create `src/components/PropertyImagePlaceholder.tsx`:
+- Props: `className?: string` (so callers pass the same sizing classes previously on `<img>`, e.g. `w-full h-48`, `h-[300px] md:h-[480px]`, `aspect-video`).
+- Renders a `bg-gray-100` block with flex-centered content:
+  - `<ImageOff />` from `lucide-react`, `size={32}`, `color="#9CA3AF"`
+  - `<p className="text-sm text-gray-400 mt-2">Images Unavailable</p>`
+- Rounded corners inherited via className.
 
-## Diagnostic steps
+## 2. Replace `<img>` usages (public-facing)
+Swap the property-photo `<img>` tags for `<PropertyImagePlaceholder />` with matching size classes:
 
-1. **Check Supabase Auth settings**
-   - Confirm "Confirm email" is enabled for the Email provider.
-   - Check the Auth rate limits (Supabase's default SMTP is capped at ~2 emails/hour and is for testing only — this is the most common cause).
+- `src/pages/Properties.tsx` (line 80) — listing card thumbnail (`w-full h-48 rounded-t-lg`-equivalent).
+- `src/pages/Index.tsx` (line 179) — featured property card on home page.
+- `src/pages/PropertyDetail.tsx` (lines 49–61) — replace the entire `<Carousel>` block with a single full-width placeholder (`w-full h-[300px] md:h-[480px] rounded-xl`). Remove now-unused `Carousel*` imports.
 
-2. **Check whether a custom auth email hook is configured**
-   - The project has no `auth-email-hook` edge function and no email domain set up in Lovable Emails. That means auth emails are currently sent via Supabase's built-in default SMTP, which is rate-limited and not for production.
-   - Look at recent Auth logs for the user's signup to see if the email send was attempted, throttled, or bounced.
+## 3. Portal-facing property views
+Per the request, property cards inside the Landlord portal and Admin backend should also use the placeholder:
 
-3. **Check the user's row in `auth.users`**
-   - Look at `email_confirmed_at` (null = still pending), `confirmation_sent_at`, and `email` to make sure the address is correct.
+- `src/pages/portal/landlord/Properties.tsx` (lines ~180–192) — replace the `images[0]` branch (and the empty-state `Building2` fallback) with `<PropertyImagePlaceholder className="w-full h-full" />` inside the existing `aspect-video` wrapper.
+- `src/pages/portal/landlord/PropertyDetail.tsx` (lines ~253–260) — same swap for the hero image block.
+- `src/pages/portal/admin/Properties.tsx` — audit and apply the same swap to any property image renders (if none exist, no change).
 
-4. **Check spam/typo**
-   - Confirm with the user the exact email address used and ask them to check spam/promotions.
+## 4. Keep upload UI intact
+Do NOT modify:
+- `src/pages/portal/landlord/AddProperty.tsx` upload field and Supabase upload logic.
+- Any admin property form upload UI.
+Landlords/admins can still attach images; they simply won't render publicly until we flip this back on later.
 
-## Likely fix (pending diagnosis)
+## 5. Out of scope
+- No changes to Supabase schema, storage buckets, or upload flows.
+- No changes to non-property images (blog, events, partner logos, avatars).
+- No feature flag — a straight visual swap; re-enabling later means restoring the `<img>` tags.
 
-If the cause is Supabase's default SMTP being rate-limited/unreliable (very likely), the proper fix is to set up **Lovable Emails** with a verified sender domain and scaffold the auth email templates so confirmation emails are sent reliably from your own domain.
-
-That involves:
-- Setting up an email sender domain (DNS delegation to Lovable).
-- Scaffolding the `auth-email-hook` edge function + branded React Email templates (signup, recovery, magic link, etc.).
-- Deploying the hook so Supabase routes auth emails through it.
-
-No default templates change is needed if you only want delivery to work — but custom branded templates are recommended.
-
-## Manual recovery for the affected user
-
-While we fix delivery, I can either:
-- Resend the confirmation from the Supabase Users dashboard, or
-- Manually mark the user as confirmed (admin action) so they can sign in immediately.
-
-## Questions before I proceed
-
-1. Can you share the email address used (so I can check `auth.users` + auth logs)?
-2. Do you want me to set up **Lovable Emails with your own sender domain** now (recommended, fixes deliverability permanently)?
-3. For the stuck user, should I resend the confirmation or manually confirm their account?
+## Technical notes
+- `ImageOff` icon is available in `lucide-react`.
+- Color `#9CA3AF` and `text-gray-400`/`bg-gray-100` are used verbatim per the spec (not tokenized) so the placeholder reads as a clearly neutral "unavailable" state and matches the requested design.
+- The placeholder accepts `className` so each call site preserves the exact dimensions of the image it replaces (no layout shift).
