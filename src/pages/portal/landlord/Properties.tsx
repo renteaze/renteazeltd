@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import PortalShell from "@/components/portal/PortalShell";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { formatNGN } from "@/lib/format";

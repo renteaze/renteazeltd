@@ -7,6 +7,7 @@ import Layout from "@/components/Layout";
 import SectionHeading from "@/components/SectionHeading";
 import UpcomingEvents from "@/components/UpcomingEvents";
 import PartnerLogosCarousel from "@/components/PartnerLogosCarousel";
+import PropertyImagePlaceholder from "@/components/PropertyImagePlaceholder";
 import { featuredProperties } from "@/data/properties";
 import { blogPosts } from "@/data/blog";
 import { Bed, Bath, Maximize, Calendar, Clock } from "lucide-react";
